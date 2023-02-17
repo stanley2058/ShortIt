@@ -5,17 +5,31 @@ describe("database", () => {
   const url: TShortUrl = {
     id: "this_is_a_test_record",
     url: "https://google.com",
+    userId: "abc@example.com",
     isOgCustom: false,
   };
 
   it("insert short url", async () => {
-    const insertRes = await Database.getInstance().updateOrInsert(url);
-    expect(url.id).toEqual(insertRes.id);
+    const res = await Database.getInstance().updateOrInsert(url);
+    expect(url.id).toEqual(res.id);
   });
 
   it("gets short url by id", async () => {
-    const getRes = await Database.getInstance().get(url.id);
-    expect(url.id).toEqual(getRes?.id);
+    const res = await Database.getInstance().get(url.id);
+    expect(url.id).toEqual(res?.id);
+  });
+
+  it("gets short url by user", async () => {
+    const res = await Database.getInstance().getByUser(url.userId ?? "");
+    expect(res).toHaveLength(1);
+    expect(url.id).toEqual(res[0].id);
+
+    const resWithLimit = await Database.getInstance().getByUser(
+      url.userId ?? "",
+      1,
+      1
+    );
+    expect(resWithLimit).toHaveLength(0);
   });
 
   it("update short url", async () => {

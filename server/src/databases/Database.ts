@@ -60,6 +60,24 @@ export default class Database {
     });
   }
 
+  async getByUser(
+    userId: string,
+    skip?: number,
+    take = 20
+  ): Promise<ShortUrl[]> {
+    if (userId === "") return [];
+    return await this.prisma.shortUrl.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: skip || 0,
+      take: take,
+    });
+  }
+
   async delete(id: string): Promise<void> {
     await this.prisma.shortUrl.delete({
       where: { id },
