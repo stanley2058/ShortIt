@@ -7,7 +7,10 @@
     "start": "ts-node .",
     "test": "jest --verbose",
     "test-watch": "jest --watchAll --verbose --detectOpenHandles",
-    "coverage": "jest --verbose --coverage"
+    "coverage": "jest --verbose --coverage",
+    "db:migrate": "npx prisma migrate dev",
+    "db:generate": "npx prisma generate",
+    "db:push": "npx prisma db push"
   },
   "keywords": [],
   "author": "",

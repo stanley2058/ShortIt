@@ -11,10 +11,10 @@ services:
     image: postgres
     restart: unless-stopped
     environment:
+      - POSTGRES_DB=shortit
       - POSTGRES_USER=shortit
       - POSTGRES_PASSWORD=shortit
-      - POSTGRES_DB=shortit
     ports:
       - 5432:5432
     volumes:
-      - ./postgres:/data
+      - ./postgres:/var/lib/postgresql/data
