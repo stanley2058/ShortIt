@@ -1,4 +1,5 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, ShortUrl } from "@prisma/client";
+import { TShortUrl } from "../types/TShortUrl";
 import Redis from "ioredis";
 import { createPrismaRedisCache } from "prisma-redis-middleware";
 // apply fixes from https://github.com/Asjas/prisma-redis-middleware/issues/230
@@ -10,8 +11,8 @@ export default class Database {
   private static instance?: Database;
   static getInstance = () => this.instance || (this.instance = new this());
 
-  private redis;
-  private prisma;
+  private redis!: Redis;
+  private prisma!: PrismaClient;
 
   private constructor() {
     try {
@@ -39,5 +40,34 @@ export default class Database {
       Logger.verbose("", err);
       Logger.fatal("cannot establish database connection");
     }
+  }
+
+  async updateOrInsert(url: TShortUrl): Promise<ShortUrl> {
+    return await this.prisma.shortUrl.upsert({
+      where: {
+        id: url.id,
+      },
+      create: url,
+      update: url,
+    });
+  }
+
+  async get(id: string): Promise<ShortUrl | null> {
+    return await this.prisma.shortUrl.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.shortUrl.delete({
+      where: { id },
+    });
+  }
+
+  closeAllConnection() {
+    this.redis.disconnect();
+    this.prisma.$disconnect();
   }
 }
