@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ShortUrl {
+  id              String    @id @db.VarChar(255)
+  url             String
+  userId          String?
+  createdAt       DateTime  @default(now())
+  views           Int       @default(0)
+  isOgCustom      Boolean
+  ogTitle         String?
+  ogDescription   String?
+  ogImage         String?
+
+  @@index(fields: [id, url, userId])
+}

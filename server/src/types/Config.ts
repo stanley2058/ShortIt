@@ -5,9 +5,6 @@ type Config = {
   apiVersion: string;
   logLevel: LogLevels;
   redisUri: string;
-  postgresUri: string;
-  postgresUsername: string;
-  postgresPassword: string;
   auth0Token: string;
 };
 
@@ -16,9 +13,6 @@ class DefaultConfig implements Config {
   apiVersion = "v1";
   logLevel: LogLevels = "verbose";
   redisUri = "redis://localhost:6379";
-  postgresUri = "postgres://localhost:5432";
-  postgresUsername = "shortit";
-  postgresPassword = "shortit";
   auth0Token = "";
 }
 
@@ -27,9 +21,6 @@ const EnvMap = {
   API_VERSION: "apiVersion" as const,
   LOG_LEVEL: "logLevel" as const,
   REDIS_URI: "redisUri" as const,
-  POSTGRES_URI: "postgresUri" as const,
-  POSTGRES_USERNAME: "postgresUsername" as const,
-  POSTGRES_PASSWORD: "postgresPassword" as const,
   AUTH0_TOKEN: "auth0Token" as const,
 };
 
