@@ -5,7 +5,7 @@ type Config = {
   apiVersion: string;
   logLevel: LogLevels;
   redisUri: string;
-  auth0Token: string;
+  jwkUri: string;
 };
 
 class DefaultConfig implements Config {
@@ -13,7 +13,7 @@ class DefaultConfig implements Config {
   apiVersion = "v1";
   logLevel: LogLevels = "verbose";
   redisUri = "redis://localhost:6379";
-  auth0Token = "";
+  jwkUri = "";
 }
 
 const EnvMap = {
@@ -21,7 +21,7 @@ const EnvMap = {
   API_VERSION: "apiVersion" as const,
   LOG_LEVEL: "logLevel" as const,
   REDIS_URI: "redisUri" as const,
-  AUTH0_TOKEN: "auth0Token" as const,
+  JWK_URI: "jwkUri" as const,
 };
 
 export { Config, DefaultConfig, EnvMap };
