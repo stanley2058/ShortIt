@@ -42,6 +42,14 @@ describe("database", () => {
     expect(res.url).toEqual(update.url);
   });
 
+  it("gets short url by url", async () => {
+    const res1 = await Database.getInstance().getByUrl("https://example.com");
+    const res2 = await Database.getInstance().getByUrl("https://google.com");
+    expect(res1).toBeTruthy();
+    expect(res1?.id).toEqual(url.id);
+    expect(res2).toBeNull();
+  });
+
   it("delete short url by id", async () => {
     await Database.getInstance().delete(url.id);
     const res = await Database.getInstance().get(url.id);

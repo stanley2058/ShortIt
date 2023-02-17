@@ -78,6 +78,15 @@ export default class Database {
     });
   }
 
+  async getByUrl(url: string, userId?: string): Promise<ShortUrl | null> {
+    return await this.prisma.shortUrl.findFirst({
+      where: {
+        url,
+        userId,
+      },
+    });
+  }
+
   async delete(id: string): Promise<void> {
     await this.prisma.shortUrl.delete({
       where: { id },
