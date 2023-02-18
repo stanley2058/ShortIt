@@ -37,9 +37,13 @@ describe("database", () => {
   });
 
   it("update short url", async () => {
-    const update = {
+    const update: TShortUrl = {
       ...url,
       url: "https://example.com",
+      isOgCustom: true,
+      ogTitle: "Test!",
+      ogDescription: "Test record!",
+      ogImage: "https://example.com/example.png",
     };
     const res = await Database.getInstance().updateOrInsert(update);
     expect(url.id).toEqual(res.id);
@@ -47,11 +51,27 @@ describe("database", () => {
   });
 
   it("gets short url by url", async () => {
-    const res1 = await Database.getInstance().getByUrl("https://example.com");
+    const res1 = await Database.getInstance().getByUrl(
+      "https://example.com",
+      undefined,
+      true
+    );
     const res2 = await Database.getInstance().getByUrl("https://google.com");
+    const res3 = await Database.getInstance().getByUrl(
+      "https://example.com",
+      "123@example.com"
+    );
+    const res4 = await Database.getInstance().getByUrl(
+      "https://example.com",
+      "abc@example.com"
+    );
+    const res5 = await Database.getInstance().getByUrl("https://example.com");
     expect(res1).toBeTruthy();
     expect(res1?.id).toEqual(url.id);
     expect(res2).toBeNull();
+    expect(res3).toBeNull();
+    expect(res4).toStrictEqual(res1);
+    expect(res5).toBeNull();
   });
 
   it("delete short url by id", async () => {

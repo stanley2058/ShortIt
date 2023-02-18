@@ -84,11 +84,16 @@ export default class Database {
     });
   }
 
-  async getByUrl(url: string, userId?: string): Promise<ShortUrl | null> {
+  async getByUrl(
+    url: string,
+    userId?: string,
+    allowCustomOg = userId === undefined ? false : undefined
+  ): Promise<ShortUrl | null> {
     return await this.prisma.shortUrl.findFirst({
       where: {
         url,
         userId,
+        isOgCustom: allowCustomOg,
       },
     });
   }
