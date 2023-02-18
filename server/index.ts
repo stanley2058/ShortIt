@@ -1,13 +1,14 @@
 import Env from "./src/Env";
 import Logger from "./src/Logger";
 
-import express from "express";
+import express, { Router } from "express";
 import cors from "cors";
 import compression from "compression";
 
 import { auth, requiresAuth } from "express-openid-connect";
 import UrlService from "./src/UrlService";
 import { TAuth0User } from "./src/types/TAuth0User";
+import path from "path";
 
 Logger.setGlobalLogLevel(Env.logLevel);
 Logger.verbose("Configuration loaded:");
@@ -54,10 +55,13 @@ app.get(`/s/:id`, (_req, res) => {
   res.contentType("html").send("<html><body>Placeholder</body></html>");
 });
 
-app.get("/", (_req, res) => {
-  // TODO: serve SPA here
-  res.sendStatus(200);
-});
+// serve SPA webpage
+const spaRouter = Router();
+spaRouter.use(express.static("dist"));
+spaRouter.get("*", (_, res) =>
+  res.sendFile(path.resolve(__dirname, "dist/index.html"))
+);
+app.use(spaRouter);
 
 (async () => {
   app.listen(Env.port, () => {
