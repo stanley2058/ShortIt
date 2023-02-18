@@ -1,6 +1,21 @@
+import { ShortUrl } from "@prisma/client";
+import { Request, Response } from "express";
 import Database from "./databases/Database";
+import { TOpenGraphUrl } from "./types/TOpenGraphUrl";
+import mScraper from "metascraper";
+import mDescription from "metascraper-description";
+import mImage from "metascraper-image";
+import mTitle from "metascraper-title";
+import NodeDomParser from "dom-parser";
 
+type TReqOpenGraphUrl = TOpenGraphUrl & { id?: string };
+type TResOpenGraphUrl = TOpenGraphUrl & { id: string };
 export default class UrlService {
+  private static readonly metaScraper = mScraper([
+    mDescription(),
+    mImage(),
+    mTitle(),
+  ]);
   private static readonly charOpts =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -23,5 +38,29 @@ export default class UrlService {
     const exist = await Database.getInstance().get(id);
     if (exist === null) return id;
     return this.generateUrlId(length, retry + 1);
+  }
+
+  static mapShortUrlToResOGUrl(sUrl: ShortUrl): TResOpenGraphUrl {
+    return {
+      id: sUrl.id,
+      url: sUrl.url,
+      ogTitle: sUrl.ogTitle || undefined,
+      ogDescription: sUrl.ogDescription || undefined,
+      ogImage: sUrl.ogImage || undefined,
+    };
+  }
+
+  static async fetchOgMetadata(url: string): Promise<TOpenGraphUrl | null> {
+    const html = await fetch(url).then((res) => res.text());
+    const title = new NodeDomParser()
+      .parseFromString(html)
+      .getElementsByTagName("title")?.[0].innerHTML;
+    const metadata = await this.metaScraper({ url, html });
+    return {
+      url,
+      ogTitle: metadata.title || title,
+      ogDescription: metadata.description || title,
+      ogImage: metadata.image,
+    };
   }
 }
