@@ -9,6 +9,10 @@ describe("database", () => {
     isOgCustom: false,
   };
 
+  beforeAll(async () => {
+    await Database.getInstance().connect();
+  });
+
   it("insert short url", async () => {
     const res = await Database.getInstance().updateOrInsert(url);
     expect(url.id).toEqual(res.id);
@@ -56,8 +60,7 @@ describe("database", () => {
     expect(res).toBeNull();
   });
 
-  afterAll((done) => {
-    Database.getInstance().closeAllConnection();
-    done();
+  afterAll(async () => {
+    await Database.getInstance().disconnect();
   });
 });

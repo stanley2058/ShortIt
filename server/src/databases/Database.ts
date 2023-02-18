@@ -13,12 +13,18 @@ export default class Database {
 
   private redis!: Redis;
   private prisma!: PrismaClient;
+  private connectionStatus = {
+    redis: false,
+    prisma: false,
+  };
 
   private constructor() {
     try {
       this.redis = new Redis(Env.redisUri);
+      this.connectionStatus.redis = true;
       Logger.verbose("connected to redis");
       this.prisma = new PrismaClient();
+      this.connectionStatus.prisma = true;
       Logger.verbose("connected to postgres");
 
       const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
@@ -93,8 +99,33 @@ export default class Database {
     });
   }
 
-  closeAllConnection() {
-    this.redis.disconnect();
-    this.prisma.$disconnect();
+  async connect() {
+    const { redis, prisma } = this.connectionStatus;
+    try {
+      if (!redis) await this.redis.connect();
+      if (!prisma) await this.prisma.$connect();
+      this.connectionStatus = {
+        redis: true,
+        prisma: true,
+      };
+    } catch (err) {
+      Logger.verbose("", err);
+      Logger.fatal("cannot connect to database");
+    }
+  }
+
+  async disconnect() {
+    const { redis, prisma } = this.connectionStatus;
+    try {
+      if (redis) await this.redis.quit();
+      if (prisma) await this.prisma.$disconnect();
+      this.connectionStatus = {
+        redis: false,
+        prisma: false,
+      };
+    } catch (err) {
+      Logger.verbose("", err);
+      Logger.error("error occurs while trying to disconnect from database");
+    }
   }
 }
