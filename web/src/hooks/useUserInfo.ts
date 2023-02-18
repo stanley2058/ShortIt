@@ -1,16 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
 import { TAuth0User } from "../types/TAuth0User";
-
-const API_URL = import.meta.env.VITE_API_URL;
-const API_VER = import.meta.env.VITE_API_VERSION;
-const API_URI = `${API_URL}/api/${API_VER}`;
+import Utils from "../Utils";
 
 async function fetchUserInfo(): Promise<TAuth0User | null> {
-  const res = await fetch(`${API_URI}/user`, {
+  const res = await fetch(`${Utils.API_URI}/user`, {
     method: "GET",
     credentials: "include",
   });
-  if (res.ok) return await res.json();
+  if (res.ok) return res.json();
   return null;
 }
 
