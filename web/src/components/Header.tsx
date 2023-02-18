@@ -15,8 +15,10 @@ export default function Header(props: PropsWithChildren) {
               ta="center"
               fz="xl"
               fw={700}
+              fs="italic"
+              sx={{ fontFamily: "Azeret Mono, monospace" }}
             >
-              Short It!
+              ://Short It!
             </Text>
             <User />
           </Group>
