@@ -50,6 +50,13 @@ app.delete(`${Env.apiPrefix}/url/:id`, requiresAuth(), async (req, res) => {
     res.status(403).send((err as Error).message);
   }
 });
+app.get(`${Env.apiPrefix}/og`, async (req, res) => {
+  const { url } = req.query as { url: string };
+  const ogMeta = await UrlService.fetchOgMetadata(decodeURIComponent(url));
+
+  if (ogMeta) res.json(ogMeta);
+  else res.sendStatus(400);
+});
 app.get(`/s/:id`, (_req, res) => {
   // TODO: implement redirect html page generator
   res.contentType("html").send("<html><body>Placeholder</body></html>");
