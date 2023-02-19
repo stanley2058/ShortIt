@@ -1,7 +1,8 @@
 import { Card, Image, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { TOpenGraphUrl } from "../types/TOpenGraphUrl";
-import placeholder from "../../public/placeholder.svg";
+// eslint-disable-next-line import/no-absolute-path
+import placeholder from "/placeholder.svg";
 import UrlService from "../services/UrlService";
 
 export default function OgPreview(props: { ogMeta: TOpenGraphUrl }) {
