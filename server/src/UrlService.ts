@@ -30,7 +30,11 @@ export default class UrlService {
       return;
     }
 
-    const isOgCustom = !!body.ogTitle || !!body.ogDescription || !!body.ogImage;
+    const metadata = await this.fetchOgMetadata(body.url);
+    const isOgCustom =
+      body.ogTitle !== metadata?.ogTitle ||
+      body.ogDescription !== metadata?.ogDescription ||
+      body.ogImage !== metadata?.ogImage;
 
     // trying to create a new url
     if (body.id === undefined) {
@@ -40,7 +44,6 @@ export default class UrlService {
         return;
       }
 
-      const metadata = await this.fetchOgMetadata(body.url);
       const created = await Database.getInstance().updateOrInsert({
         ...metadata,
         ...body,
