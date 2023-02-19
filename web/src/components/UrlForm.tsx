@@ -60,8 +60,10 @@ export default function UrlForm() {
         confirmButtonText: "Copy to clipboard!",
         showCancelButton: true,
       });
-      if (sRes.isConfirmed) await UrlService.copyToClipboard(shorted);
-      form.reset();
+      if (sRes.isConfirmed) {
+        await UrlService.copyToClipboard(shorted);
+        form.reset();
+      }
     } catch (err) {
       await Swal.fire({
         icon: "error",
