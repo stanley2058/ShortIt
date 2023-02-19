@@ -156,7 +156,7 @@ export default class UrlService {
         ogImage: metadata.image,
       };
     } catch (err) {
-      Logger.error(`error occurs fetching open graph metadata from: ${url}`);
+      Logger.warn(`error occurs fetching open graph metadata from: ${url}`);
       Logger.plain.verbose("", err);
     }
     return null;
