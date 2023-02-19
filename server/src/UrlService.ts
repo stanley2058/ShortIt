@@ -2,22 +2,12 @@ import { ShortUrl } from "@prisma/client";
 import { Request, Response } from "express";
 import Database from "./databases/Database";
 import { TOpenGraphUrl } from "./types/TOpenGraphUrl";
-import mScraper from "metascraper";
-import mDescription from "metascraper-description";
-import mImage from "metascraper-image";
-import mTitle from "metascraper-title";
-import NodeDomParser from "dom-parser";
 import { TAuth0User } from "./types/TAuth0User";
-import Logger from "./Logger";
+import OpenGraphService from "./OpenGraphService";
 
 type TReqOpenGraphUrl = TOpenGraphUrl & { id?: string };
 type TResOpenGraphUrl = TOpenGraphUrl & { id: string };
 export default class UrlService {
-  private static readonly metaScraper = mScraper([
-    mDescription(),
-    mImage(),
-    mTitle(),
-  ]);
   private static readonly charOpts =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -30,7 +20,9 @@ export default class UrlService {
       return;
     }
 
-    const metadata = await this.fetchOgMetadata(body.url);
+    const metadata = await OpenGraphService.getInstance().getOgMetadata(
+      body.url
+    );
     const isOgCustom =
       body.ogTitle !== metadata?.ogTitle ||
       body.ogDescription !== metadata?.ogDescription ||
@@ -138,30 +130,5 @@ export default class UrlService {
       ogDescription: sUrl.ogDescription || undefined,
       ogImage: sUrl.ogImage || undefined,
     };
-  }
-
-  /**
-   * Fetches the Open Graph metadata from a given url
-   * @param url url to fetch from
-   * @returns a TOpenGraphUrl object or a null value if failed
-   */
-  static async fetchOgMetadata(url: string): Promise<TOpenGraphUrl | null> {
-    try {
-      const html = await fetch(url).then((res) => res.text());
-      const title = new NodeDomParser()
-        .parseFromString(html)
-        .getElementsByTagName("title")?.[0].innerHTML;
-      const metadata = await this.metaScraper({ url, html });
-      return {
-        url,
-        ogTitle: metadata.title || title,
-        ogDescription: metadata.description || title,
-        ogImage: metadata.image,
-      };
-    } catch (err) {
-      Logger.warn(`error occurs fetching open graph metadata from: ${url}`);
-      Logger.plain.verbose("", err);
-    }
-    return null;
   }
 }

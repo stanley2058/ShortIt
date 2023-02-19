@@ -9,6 +9,7 @@ import { auth, requiresAuth } from "express-openid-connect";
 import UrlService from "./src/UrlService";
 import { TAuth0User } from "./src/types/TAuth0User";
 import path from "path";
+import OpenGraphService from "./src/OpenGraphService";
 
 Logger.setGlobalLogLevel(Env.logLevel);
 Logger.verbose("Configuration loaded:");
@@ -57,13 +58,16 @@ app.delete(`${Env.apiPrefix}/url/:id`, requiresAuth(), async (req, res) => {
 });
 app.get(`${Env.apiPrefix}/og`, async (req, res) => {
   const { url } = req.query as { url: string };
-  const ogMeta = await UrlService.fetchOgMetadata(decodeURIComponent(url));
+  const ogMeta = await OpenGraphService.getInstance().getOgMetadata(
+    decodeURIComponent(url)
+  );
 
   if (ogMeta) res.json(ogMeta);
   else res.sendStatus(400);
 });
 app.get(`/s/:id`, (_req, res) => {
   // TODO: implement redirect html page generator
+  // TODO: increment view count
   res.contentType("html").send("<html><body>Placeholder</body></html>");
 });
 
