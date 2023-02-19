@@ -92,7 +92,7 @@ export default class Database {
     return await this.prisma.shortUrl.findFirst({
       where: {
         url,
-        userId,
+        userId: userId || null,
         isOgCustom: allowCustomOg,
       },
     });

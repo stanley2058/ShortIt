@@ -30,7 +30,10 @@ export default class UrlService {
 
     // trying to create a new url
     if (body.id === undefined) {
-      const existing = await Database.getInstance().getByUrl(body.url);
+      const existing = await Database.getInstance().getByUrl(
+        body.url,
+        user?.email
+      );
       if (existing) {
         res.json(this.mapShortUrlToResOGUrl(existing));
         return;
