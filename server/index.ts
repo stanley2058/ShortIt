@@ -35,8 +35,8 @@ app.get(`${Env.apiPrefix}/url/:id`, async (req, res) => {
 });
 app.get(`${Env.apiPrefix}/url`, requiresAuth(), async (req, res) => {
   const { s, t } = req.query as { s?: string; t?: string };
-  const skip = s ? parseInt(s) : NaN;
-  const take = t ? parseInt(t) : NaN;
+  const skip = s !== undefined ? parseInt(s) : NaN;
+  const take = t !== undefined ? parseInt(t) : NaN;
   const user = req.oidc.user as TAuth0User;
 
   res.json(await UrlService.getAllShortUrls(user, skip, take));

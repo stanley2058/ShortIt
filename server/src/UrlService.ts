@@ -67,12 +67,12 @@ export default class UrlService {
       return;
     }
 
-    const created = await Database.getInstance().updateOrInsert({
+    const update = await Database.getInstance().updateOrInsert({
       ...this.mapShortUrlToResOGUrl(existing),
       ...body,
       isOgCustom: existing.isOgCustom || isOgCustom,
     });
-    res.json(this.mapShortUrlToResOGUrl(created));
+    res.json(this.mapShortUrlToResOGUrl(update));
   }
 
   static async getOGUrl(id: string): Promise<TResOpenGraphUrl | null> {
