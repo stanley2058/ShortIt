@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import UrlService from "../services/UrlService";
 import { TOpenGraphUrl } from "../types/TOpenGraphUrl";
-import Utils from "../Utils";
+import Envs from "../Envs";
 
 async function fetchOgInfo(url: string): Promise<TOpenGraphUrl | null> {
-  const res = await fetch(`${Utils.API_URI}/og?url=${encodeURIComponent(url)}`);
+  const res = await fetch(`${Envs.API_URI}/og?url=${encodeURIComponent(url)}`);
   if (res.ok) return res.json();
   return null;
 }

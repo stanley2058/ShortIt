@@ -1,9 +1,9 @@
 import { useState, useMemo, useEffect } from "react";
 import { TAuth0User } from "../types/TAuth0User";
-import Utils from "../Utils";
+import Envs from "../Envs";
 
 async function fetchUserInfo(): Promise<TAuth0User | null> {
-  const res = await fetch(`${Utils.API_URI}/user`, {
+  const res = await fetch(`${Envs.API_URI}/user`, {
     method: "GET",
     credentials: "include",
   });
