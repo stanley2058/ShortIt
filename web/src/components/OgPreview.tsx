@@ -2,17 +2,17 @@ import { Card, Image, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { TOpenGraphUrl } from "../types/TOpenGraphUrl";
 import placeholder from "../../public/placeholder.svg";
-import Utils from "../Utils";
+import UrlService from "../services/UrlService";
 
 export default function OgPreview(props: { ogMeta: TOpenGraphUrl }) {
   const [imgUrl, setImgUrl] = useState(placeholder);
   useEffect(() => {
-    const urlValid = Utils.verifyUrl(props.ogMeta.ogImage || "");
+    const urlValid = UrlService.verifyUrl(props.ogMeta.ogImage || "");
     if (!urlValid) setImgUrl(placeholder);
     else setImgUrl(props.ogMeta.ogImage || placeholder);
   }, [props]);
 
-  const siteUrl = Utils.verifyUrl(props.ogMeta.url)
+  const siteUrl = UrlService.verifyUrl(props.ogMeta.url)
     ? props.ogMeta.url
     : "https://example.com";
 

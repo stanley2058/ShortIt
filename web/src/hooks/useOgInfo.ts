@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import UrlService from "../services/UrlService";
 import { TOpenGraphUrl } from "../types/TOpenGraphUrl";
 import Utils from "../Utils";
 
@@ -13,7 +14,7 @@ export default function useOgInfo(url: string) {
 
   useEffect(() => {
     (async () => {
-      if (Utils.verifyUrl(url)) setOgInfo(await fetchOgInfo(url));
+      if (UrlService.verifyUrl(url)) setOgInfo(await fetchOgInfo(url));
       else if (ogInfo) setOgInfo(null);
     })();
   }, [url]);
