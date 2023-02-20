@@ -1,13 +1,13 @@
 import { MantineProvider } from "@mantine/core";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import "./index.css";
 import Header from "./components/Header";
 
-const router = createBrowserRouter([
+const router = [
   {
     path: "/",
     element: <Home />,
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     path: "/profile",
     element: <Profile />,
   },
-]);
+];
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -25,9 +25,15 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       withGlobalStyles
       withNormalizeCSS
     >
-      <Header>
-        <RouterProvider router={router} />
-      </Header>
+      <BrowserRouter>
+        <Header>
+          <Routes>
+            {router.map((r) => (
+              <Route key={r.path} {...r} />
+            ))}
+          </Routes>
+        </Header>
+      </BrowserRouter>
     </MantineProvider>
   </React.StrictMode>
 );
