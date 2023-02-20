@@ -69,7 +69,7 @@ export default class Database {
   async getByUser(
     userId: string,
     skip?: number,
-    take = 20
+    take = 10
   ): Promise<ShortUrl[]> {
     if (userId === "") return [];
     return await this.prisma.shortUrl.findMany({
