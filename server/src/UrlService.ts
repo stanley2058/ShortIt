@@ -12,7 +12,7 @@ export default class UrlService {
   private static readonly charOpts =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   private static readonly reservedWords = new Set(
-    ...["user", "counts", "login", "logout", "profile", "about"]
+    ...["user", "counts", "login", "logout", "manage", "about"]
   );
 
   static async insertOrUpdateUrl(req: Request, res: Response): Promise<void> {

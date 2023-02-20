@@ -5,7 +5,7 @@ import useUrlHistory from "../hooks/useUrlHistory";
 import useUserInfo from "../hooks/useUserInfo";
 import UrlTable from "./UrlTable";
 
-export default function Profile() {
+export default function Manage() {
   const navigate = useNavigate();
   const [user, isLoading] = useUserInfo();
 

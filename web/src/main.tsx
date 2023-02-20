@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from "./components/Home";
-import Profile from "./components/Profile";
+import Manage from "./components/Manage";
 import "./index.css";
 import Header from "./components/Header";
 
@@ -13,8 +13,8 @@ const router = [
     element: <Home />,
   },
   {
-    path: "/profile",
-    element: <Profile />,
+    path: "/manage",
+    element: <Manage />,
   },
 ];
 
