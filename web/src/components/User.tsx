@@ -1,6 +1,12 @@
-import { Anchor, Avatar, Button, Flex, Tooltip } from "@mantine/core";
+import { ActionIcon, Anchor, Avatar, Flex, Menu, Tooltip } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  IconLogin,
+  IconLogout,
+  IconInfoSquare,
+  IconTools,
+} from "@tabler/icons-react";
 import Envs from "../Envs";
 import useUserInfo from "../hooks/useUserInfo";
 
@@ -16,30 +22,52 @@ export default function User() {
   }, [isLoading]);
 
   return (
-    <>
+    <Flex gap="md" align="center">
+      <Tooltip label="About" onClick={() => navigate("/about")}>
+        <ActionIcon color="cyan" variant="subtle">
+          <IconInfoSquare />
+        </ActionIcon>
+      </Tooltip>
       {hasLogin ? (
-        <Flex gap="md" align="center">
-          <Anchor href={`${Envs.SERVER_URL}/logout`} target="_self">
-            <Button variant="outline" color="red">
-              Logout
-            </Button>
-          </Anchor>
-          <Tooltip label="Go to profile">
-            <Avatar
-              src={userInfo?.picture}
-              alt={userInfo?.email}
-              onClick={() => navigate("/profile")}
-              sx={{ cursor: "pointer" }}
-            />
-          </Tooltip>
-        </Flex>
-      ) : (
         <>
-          <Anchor href={`${Envs.SERVER_URL}/login`} target="_self">
-            <Button variant="outline">Login</Button>
-          </Anchor>
+          <Menu shadow="md">
+            <Menu.Target>
+              <Tooltip label="Options">
+                <Avatar
+                  src={userInfo?.picture}
+                  alt={userInfo?.email}
+                  sx={{ cursor: "pointer" }}
+                />
+              </Tooltip>
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item
+                icon={<IconTools />}
+                onClick={() => navigate("/manage")}
+              >
+                Manage URLs
+              </Menu.Item>
+              <Menu.Item
+                color="red"
+                icon={<IconLogout />}
+                onClick={() =>
+                  window.open(`${Envs.SERVER_URL}/logout`, "_self")
+                }
+              >
+                Logout
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
         </>
+      ) : (
+        <Tooltip label="Login">
+          <Anchor href={`${Envs.SERVER_URL}/login`} target="_self">
+            <ActionIcon variant="subtle">
+              <IconLogin />
+            </ActionIcon>
+          </Anchor>
+        </Tooltip>
       )}
-    </>
+    </Flex>
   );
 }
