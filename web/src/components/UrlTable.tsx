@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
+import Swal from "sweetalert2";
 import Envs from "../Envs";
 import useUrlHistory from "../hooks/useUrlHistory";
 import UrlService from "../services/UrlService";
@@ -27,6 +28,31 @@ export default function UrlTable(props: { skip: number; take: number }) {
   const [urls, , refresh] = useUrlHistory(props.skip, props.take);
   const [edit, setEdit] = useState(false);
   const [urlToEdit, setUrlToEdit] = useState<TShortUrl | null>(null);
+
+  async function deleteUrl(url: TShortUrl) {
+    const confirmRes = await Swal.fire({
+      icon: "warning",
+      title: "Confirm Deletion",
+      text: "Are you sure you want to delete this short url? This action cannot be reverted!",
+      showCancelButton: true,
+      focusCancel: true,
+      confirmButtonText: "Delete It!",
+      confirmButtonColor: "red",
+    });
+    if (confirmRes.isDenied || confirmRes.isDismissed) return;
+    try {
+      await UrlService.deleteUrl(url.id);
+      refresh();
+    } catch (err) {
+      await Swal.fire({
+        icon: "error",
+        title: "Oops!",
+        html: `<p>Something went wrong, please try again later.</p><p>${
+          (err as Error).message
+        }</p>`,
+      });
+    }
+  }
 
   return (
     <Container w="100%">
@@ -53,7 +79,10 @@ export default function UrlTable(props: { skip: number; take: number }) {
                   }
                 >
                   <Popover.Target>
-                    <Button sx={{ fontFamily: "Azeret Mono, monospace" }}>
+                    <Button
+                      sx={{ fontFamily: "Azeret Mono, monospace" }}
+                      color="green"
+                    >
                       {u.id}
                     </Button>
                   </Popover.Target>
@@ -77,7 +106,7 @@ export default function UrlTable(props: { skip: number; take: number }) {
                 <Flex justify="center" gap="sm">
                   <Tooltip label="Edit">
                     <ActionIcon
-                      color="indigo"
+                      color="teal"
                       variant="filled"
                       onClick={() => {
                         setEdit(true);
@@ -88,7 +117,11 @@ export default function UrlTable(props: { skip: number; take: number }) {
                     </ActionIcon>
                   </Tooltip>
                   <Tooltip label="Delete">
-                    <ActionIcon color="red" variant="filled">
+                    <ActionIcon
+                      color="red"
+                      variant="filled"
+                      onClick={() => deleteUrl(u)}
+                    >
                       <IconTrash />
                     </ActionIcon>
                   </Tooltip>
