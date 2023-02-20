@@ -3,11 +3,20 @@ import Env from "./Env";
 import Logger from "./Logger";
 import NodeDomParser from "dom-parser";
 import { TOpenGraphUrl } from "./types/TOpenGraphUrl";
+
 import { Scraper } from "metascraper";
 import mScraper from "metascraper";
 import mDescription from "metascraper-description";
 import mImage from "metascraper-image";
 import mTitle from "metascraper-title";
+
+import twitter from "metascraper-twitter";
+import telegram from "metascraper-telegram";
+import youtube from "metascraper-youtube";
+import spotify from "metascraper-spotify";
+import soundcloud from "metascraper-soundcloud";
+import amazon from "metascraper-amazon";
+import instagram from "metascraper-instagram";
 
 export default class OpenGraphService {
   private static instance?: OpenGraphService;
@@ -23,7 +32,18 @@ export default class OpenGraphService {
       this.hasConnected = true;
       Logger.verbose("connected to redis (OG cache)");
 
-      this.metaScraper = mScraper([mDescription(), mImage(), mTitle()]);
+      this.metaScraper = mScraper([
+        mDescription(),
+        mImage(),
+        mTitle(),
+        twitter(),
+        telegram(),
+        youtube(),
+        spotify(),
+        soundcloud(),
+        amazon(),
+        instagram(),
+      ]);
     } catch (err) {
       Logger.verbose("", err);
       Logger.fatal("cannot establish database connection");
@@ -53,13 +73,13 @@ export default class OpenGraphService {
       const html = await fetch(url).then((res) => res.text());
       const title = new NodeDomParser()
         .parseFromString(html)
-        .getElementsByTagName("title")?.[0].innerHTML;
+        .getElementsByTagName("title")?.[0]?.innerHTML;
       const metadata = await this.metaScraper({ url, html });
       return {
         url,
         ogTitle: metadata.title || title,
         ogDescription: metadata.description || title,
-        ogImage: metadata.image,
+        ogImage: metadata.image || undefined,
       };
     } catch (err) {
       Logger.warn(`error occurs fetching open graph metadata from: ${url}`);
