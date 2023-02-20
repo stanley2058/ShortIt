@@ -11,6 +11,7 @@ import {
 import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Envs from "../Envs";
 import useOgInfo from "../hooks/useOgInfo";
 import UrlService from "../services/UrlService";
 import OgPreview from "./OgPreview";
@@ -57,7 +58,7 @@ export default function UrlForm() {
         ogDescription: values.ogDescription || undefined,
         ogImage: values.ogImage || undefined,
       });
-      const shorted = `${window.origin}/s/${res.id}`;
+      const shorted = `${Envs.SERVER_URL}/${res.id}`;
       const sRes = await Swal.fire({
         icon: "success",
         title: "URL Shortened!",
