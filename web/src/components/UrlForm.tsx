@@ -51,7 +51,12 @@ export default function UrlForm() {
   const onSubmit = async (values: FormValue) => {
     setLoading(true);
     try {
-      const res = await UrlService.postUrl(values);
+      const res = await UrlService.postUrl({
+        url: values.url,
+        ogTitle: values.ogTitle || undefined,
+        ogDescription: values.ogDescription || undefined,
+        ogImage: values.ogImage || undefined,
+      });
       const shorted = `${window.origin}/s/${res.id}`;
       const sRes = await Swal.fire({
         icon: "success",
