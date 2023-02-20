@@ -5,6 +5,7 @@ import {
   Image,
   Text,
   Flex,
+  Tooltip,
 } from "@mantine/core";
 import { PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
@@ -20,31 +21,33 @@ export default function Header(props: PropsWithChildren) {
       header={
         <MantineHeader height={60} p="xs">
           <Group sx={{ height: "100%" }} px={20} position="apart">
-            <Flex
-              gap="sm"
-              align="center"
-              onClick={() => navigate("/")}
-              sx={{ cursor: "pointer" }}
-              title="Short It!"
-            >
-              <Image
-                src={logo}
-                height="2.5rem"
-                width="auto"
-                alt="Short It! logo"
-              />
-              <Text
-                variant="gradient"
-                gradient={{ from: "indigo", to: "cyan", deg: 45 }}
-                ta="center"
-                fz="xl"
-                fw={700}
-                fs="italic"
-                sx={{ fontFamily: "Azeret Mono, monospace" }}
+            <Tooltip label="Go to home page">
+              <Flex
+                gap="sm"
+                align="center"
+                onClick={() => navigate("/")}
+                sx={{ cursor: "pointer" }}
+                title="Short It!"
               >
-                Short It!
-              </Text>
-            </Flex>
+                <Image
+                  src={logo}
+                  height="2.5rem"
+                  width="auto"
+                  alt="Short It! logo"
+                />
+                <Text
+                  variant="gradient"
+                  gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+                  ta="center"
+                  fz="xl"
+                  fw={700}
+                  fs="italic"
+                  sx={{ fontFamily: "Azeret Mono, monospace" }}
+                >
+                  Short It!
+                </Text>
+              </Flex>
+            </Tooltip>
 
             <User />
           </Group>
