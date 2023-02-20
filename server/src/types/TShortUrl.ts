@@ -22,7 +22,7 @@ export function fromShortUrl(shortUrl: ShortUrl): TShortUrl {
     ogDescription: shortUrl.ogDescription || undefined,
     ogImage: shortUrl.ogImage || undefined,
     createdAt: shortUrl.createdAt || undefined,
-    views: shortUrl.views || undefined,
+    views: shortUrl.views,
   };
 
   return transformed;
