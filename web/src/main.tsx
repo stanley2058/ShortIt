@@ -6,6 +6,7 @@ import Home from "./components/Home";
 import Manage from "./components/Manage";
 import "./index.css";
 import Header from "./components/Header";
+import About from "./components/About";
 
 const router = [
   {
@@ -15,6 +16,10 @@ const router = [
   {
     path: "/manage",
     element: <Manage />,
+  },
+  {
+    path: "/about",
+    element: <About />,
   },
 ];
 
