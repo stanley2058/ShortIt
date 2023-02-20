@@ -23,5 +23,5 @@ export default function useUserInfo() {
     })();
   }, []);
 
-  return useMemo(() => [user, isLoading], [user, isLoading]);
+  return useMemo(() => [user, isLoading] as const, [user, isLoading]);
 }
