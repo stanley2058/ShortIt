@@ -71,6 +71,23 @@ export default class UrlService {
     }
   }
 
+  static async countUrls(): Promise<number> {
+    const requestUrl = new URL(`${Envs.API_URI}/url/count`);
+    const res = await fetch(requestUrl, {
+      ...this.defaultFetchOption,
+      method: "GET",
+    });
+
+    switch (res.status) {
+      case 401:
+        throw this.error401;
+      case 200:
+        return ((await res.json()) as { count: number }).count;
+      default:
+        throw this.errorUnknown;
+    }
+  }
+
   static async deleteUrl(id: string): Promise<void> {
     const res = await fetch(`${Envs.API_URI}/url/${id}`, {
       ...this.defaultFetchOption,
