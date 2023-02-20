@@ -36,6 +36,12 @@ app.get(`${Env.apiPrefix}/user`, requiresAuth(), (req, res) => {
 app.post(`${Env.apiPrefix}/url`, async (req, res) => {
   await UrlService.insertOrUpdateUrl(req, res);
 });
+app.get(`${Env.apiPrefix}/url/count`, requiresAuth(), async (req, res) => {
+  const user = req.oidc.user as TAuth0User;
+  res.json({
+    count: await Database.getInstance().countByUser(user.email),
+  });
+});
 app.get(`${Env.apiPrefix}/url/:id`, async (req, res) => {
   const result = await UrlService.getOGUrl(req.params.id);
   if (result) res.json(result);
