@@ -8,48 +8,31 @@ import {
   Textarea,
   TextInput,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import Envs from "../Envs";
+import useMetadataForm from "../hooks/useMetadataForm";
 import useOgInfo from "../hooks/useOgInfo";
 import UrlService from "../services/UrlService";
-import OgPreview from "./OgPreview";
+import { TShortUrl } from "../types/TShortUrl";
+import { UrlFormValue } from "../types/TUrlFormValue";
+import InputForm from "./UrlFormMetaInputs";
 
-type FormValue = {
-  url: string;
-  ogTitle: string;
-  ogImage: string;
-  ogDescription: string;
-};
-
-export default function UrlForm() {
-  const form = useForm({
-    initialValues: {
-      url: "",
-      ogTitle: "",
-      ogImage: "",
-      ogDescription: "",
-    },
-
-    validate: {
-      url: (value) => (UrlService.verifyUrl(value) ? null : "Invalid URL"),
-      ogTitle: (value) => (value.length > 0 ? null : "Title cannot be empty"),
-      ogImage: (value) =>
-        value ? (UrlService.verifyUrl(value) ? null : "Invalid URL") : null,
-    },
-  });
+export default function UrlForm(props?: { edit: TShortUrl }) {
+  const form = useMetadataForm(props?.edit);
   const [loading, setLoading] = useState(false);
   const ogInfo = useOgInfo(form.getInputProps("url").value);
 
   useEffect(() => {
-    const { ogTitle, ogDescription, ogImage } = ogInfo || {};
+    const url = form.getInputProps("url").value;
+    const { ogTitle, ogDescription, ogImage } =
+      props && props.edit.url === url ? props.edit : ogInfo || {};
     form.setFieldValue("ogTitle", ogTitle || "");
     form.setFieldValue("ogDescription", ogDescription || "");
     form.setFieldValue("ogImage", ogImage || "");
   }, [ogInfo, form.getInputProps("url").value]);
 
-  const onSubmit = async (values: FormValue) => {
+  async function onSubmit(values: UrlFormValue): Promise<void> {
     setLoading(true);
     try {
       const res = await UrlService.postUrl({
@@ -79,7 +62,7 @@ export default function UrlForm() {
     }
 
     setLoading(false);
-  };
+  }
 
   return (
     <form onSubmit={form.onSubmit(onSubmit)}>
@@ -91,70 +74,20 @@ export default function UrlForm() {
           {...form.getInputProps("url")}
         />
       </Container>
-      <Container ta="center" py="xs">
-        <Button
-          size="lg"
-          variant="gradient"
-          gradient={{ from: "indigo", to: "cyan", deg: 140 }}
-          type="submit"
-        >
-          Short It!
-        </Button>
-      </Container>
+      {props ? null : (
+        <Container ta="center" py="xs">
+          <Button
+            size="lg"
+            variant="gradient"
+            gradient={{ from: "indigo", to: "cyan", deg: 140 }}
+            type="submit"
+          >
+            Short It!
+          </Button>
+        </Container>
+      )}
       <Container py="xl">
-        <Flex
-          gap="xs"
-          justify="space-evenly"
-          align="stretch"
-          direction="row"
-          wrap="wrap"
-        >
-          <Box maw="min(100%, 20em)">
-            <Text ta="center" weight={500} size="lg">
-              Preview
-            </Text>
-            <OgPreview ogMeta={form.values} />
-          </Box>
-
-          <Box>
-            <Text ta="center" weight={500} size="lg">
-              Custom Metadata
-            </Text>
-            <Flex
-              gap="xs"
-              justify="start"
-              direction="column"
-              align="stretch"
-              pt="1rem"
-            >
-              <TextInput
-                withAsterisk
-                label="Title"
-                placeholder="Preview Title"
-                {...form.getInputProps("ogTitle")}
-                disabled={
-                  !UrlService.verifyUrl(form.getInputProps("url").value)
-                }
-              />
-              <Textarea
-                label="Description"
-                placeholder="Preview Description"
-                {...form.getInputProps("ogDescription")}
-                disabled={
-                  !UrlService.verifyUrl(form.getInputProps("url").value)
-                }
-              />
-              <TextInput
-                label="Image"
-                placeholder="Preview Image"
-                {...form.getInputProps("ogImage")}
-                disabled={
-                  !UrlService.verifyUrl(form.getInputProps("url").value)
-                }
-              />
-            </Flex>
-          </Box>
-        </Flex>
+        <InputForm form={form} />
       </Container>
     </form>
   );
