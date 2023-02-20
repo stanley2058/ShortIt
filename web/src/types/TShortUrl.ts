@@ -9,15 +9,3 @@ export type TShortUrl = {
   ogDescription?: string;
   ogImage?: string;
 };
-
-export type ShortUrl = {
-  id: string;
-  url: string;
-  userId: string | null;
-  createdAt: Date;
-  views: number;
-  isOgCustom: boolean;
-  ogTitle: string | null;
-  ogDescription: string | null;
-  ogImage: string | null;
-};

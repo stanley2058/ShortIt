@@ -1,6 +1,6 @@
 import { TOpenGraphUrl } from "../types/TOpenGraphUrl";
 import Envs from "../Envs";
-import { ShortUrl } from "../types/TShortUrl";
+import { TShortUrl } from "../types/TShortUrl";
 
 type ReqOgUrl = TOpenGraphUrl & { id?: string };
 type ResOgUrl = TOpenGraphUrl & { id: string };
@@ -51,7 +51,7 @@ export default class UrlService {
     }
   }
 
-  static async getAllUrl(skip?: number, take?: number): Promise<ShortUrl[]> {
+  static async getAllUrl(skip?: number, take?: number): Promise<TShortUrl[]> {
     const requestUrl = new URL(`${Envs.API_URI}/url`);
     if (skip) requestUrl.searchParams.append("s", skip.toString());
     if (take) requestUrl.searchParams.append("t", take.toString());
