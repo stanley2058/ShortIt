@@ -11,6 +11,9 @@ type TResOpenGraphUrl = TOpenGraphUrl & { id: string };
 export default class UrlService {
   private static readonly charOpts =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  private static readonly reservedWords = new Set(
+    ...["user", "counts", "login", "logout", "profile", "about"]
+  );
 
   static async insertOrUpdateUrl(req: Request, res: Response): Promise<void> {
     const hasLogin = req.oidc.isAuthenticated();
@@ -117,6 +120,7 @@ export default class UrlService {
       const idx = Math.floor(Math.random() * this.charOpts.length);
       id += this.charOpts[idx];
     }
+    if (this.reservedWords.has(id)) this.generateUrlId(length, retry + 1);
     const exist = await Database.getInstance().get(id);
     if (exist === null) return id;
     return this.generateUrlId(length, retry + 1);
