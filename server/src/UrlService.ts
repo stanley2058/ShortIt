@@ -4,6 +4,7 @@ import Database from "./databases/Database";
 import { TOpenGraphUrl } from "./types/TOpenGraphUrl";
 import { TAuth0User } from "./types/TAuth0User";
 import OpenGraphService from "./OpenGraphService";
+import { fromShortUrl, TShortUrl } from "./types/TShortUrl";
 
 type TReqOpenGraphUrl = TOpenGraphUrl & { id?: string };
 type TResOpenGraphUrl = TOpenGraphUrl & { id: string };
@@ -82,12 +83,13 @@ export default class UrlService {
     user: TAuth0User,
     skip: number,
     take: number
-  ): Promise<ShortUrl[]> {
-    return await Database.getInstance().getByUser(
+  ): Promise<TShortUrl[]> {
+    const res = await Database.getInstance().getByUser(
       user.email,
       isNaN(skip) ? undefined : skip,
       isNaN(take) ? undefined : take
     );
+    return res.map(fromShortUrl);
   }
 
   static async deleteUrl(id: string, userId: string): Promise<void> {

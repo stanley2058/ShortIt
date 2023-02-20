@@ -9,6 +9,8 @@ type Config = {
   auth0ClientId: string;
   auth0Uri: string;
   secret: string;
+  loginReturnUrl: string;
+  logoutReturnUrl: string;
 };
 
 class DefaultConfig implements Config {
@@ -20,6 +22,8 @@ class DefaultConfig implements Config {
   auth0ClientId = "";
   auth0Uri = "";
   secret = "";
+  loginReturnUrl = "http://localhost:5173";
+  logoutReturnUrl = "http://localhost:5173?s=logout";
 }
 
 const EnvMap = {
@@ -31,6 +35,8 @@ const EnvMap = {
   AUTH0_CLIENT_ID: "auth0ClientId" as const,
   AUTH0_URI: "auth0Uri" as const,
   SECRET: "secret" as const,
+  LOGIN_RETURN_URL: "loginReturnUrl" as const,
+  LOGOUT_RETURN_URL: "logoutReturnUrl" as const,
 };
 
 export { Config, DefaultConfig, EnvMap };

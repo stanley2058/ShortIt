@@ -1,7 +1,7 @@
 import Env from "./src/Env";
 import Logger from "./src/Logger";
 
-import express, { Router } from "express";
+import express from "express";
 import cors from "cors";
 import compression from "compression";
 
@@ -10,6 +10,8 @@ import UrlService from "./src/UrlService";
 import { TAuth0User } from "./src/types/TAuth0User";
 import path from "path";
 import OpenGraphService from "./src/OpenGraphService";
+import Database from "./src/databases/Database";
+import { fromShortUrl } from "./src/types/TShortUrl";
 
 Logger.setGlobalLogLevel(Env.logLevel);
 Logger.verbose("Configuration loaded:");
@@ -65,19 +67,32 @@ app.get(`${Env.apiPrefix}/og`, async (req, res) => {
   if (ogMeta) res.json(ogMeta);
   else res.sendStatus(400);
 });
-app.get(`/s/:id`, (_req, res) => {
+
+app.get("/login", (_, res) => res.oidc.login({ returnTo: Env.loginReturnUrl }));
+app.get("/logout", (_, res) =>
+  res.oidc.logout({ returnTo: Env.logoutReturnUrl })
+);
+
+app.get("/:id", async (req, res, next) => {
+  if (!req.params.id) return next();
+  const existing = await Database.getInstance().get(req.params.id);
+  if (!existing) return next();
+  const shortUrl = fromShortUrl(existing);
+
+  Database.getInstance().updateOrInsert({
+    ...shortUrl,
+    views: existing.views + 1,
+  });
+
   // TODO: implement redirect html page generator
-  // TODO: increment view count
   res.contentType("html").send("<html><body>Placeholder</body></html>");
 });
 
 // serve SPA webpage
-const spaRouter = Router();
-spaRouter.use(express.static("dist"));
-spaRouter.get("*", (_, res) =>
+app.use(express.static("dist"));
+app.get("*", (_, res) =>
   res.sendFile(path.resolve(__dirname, "dist/index.html"))
 );
-app.use(spaRouter);
 
 (async () => {
   app.listen(Env.port, () => {

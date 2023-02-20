@@ -25,6 +25,8 @@ class Configuration extends DefaultConfig {
       issuerBaseURL: this.auth0Uri,
       secret: this.secret,
       routes: {
+        login: false,
+        logout: false,
         callback: "/api/callback",
       },
     };
