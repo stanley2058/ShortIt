@@ -17,9 +17,12 @@ export default function useUserInfo() {
 
   useEffect(() => {
     (async () => {
-      const userInfo = await fetchUserInfo();
-      setUser(userInfo);
-      setIsLoading(false);
+      try {
+        const userInfo = await fetchUserInfo();
+        setUser(userInfo);
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, []);
 

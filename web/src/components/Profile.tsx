@@ -1,15 +1,22 @@
 import { Button, Flex, Pagination, Text, Title } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useUrlHistory from "../hooks/useUrlHistory";
+import useUserInfo from "../hooks/useUserInfo";
 import UrlTable from "./UrlTable";
 
 export default function Profile() {
   const navigate = useNavigate();
+  const [user, isLoading] = useUserInfo();
+
+  useEffect(() => {
+    if (!isLoading && !user) navigate("/");
+  }, [isLoading]);
+
   const elementPerPage = 10;
   const [skip, setSkip] = useState(0);
   const [take] = useState(elementPerPage);
-  const [urls, total] = useUrlHistory(skip, take);
+  const [, total] = useUrlHistory(skip, take);
 
   function setPage(page: number) {
     const nextSkip = (page - 1) * elementPerPage;
@@ -23,7 +30,7 @@ export default function Profile() {
       </Title>
       {total > 0 ? (
         <>
-          <UrlTable urls={urls} total={total} />
+          <UrlTable skip={skip} take={take} />
           <Pagination
             total={Math.ceil(total / take)}
             onChange={(page) => setPage(page)}
