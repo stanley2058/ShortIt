@@ -8,19 +8,25 @@ import {
   Text,
   Button,
   Popover,
+  Modal,
 } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { useState } from "react";
 import Envs from "../Envs";
+import useUrlHistory from "../hooks/useUrlHistory";
 import UrlService from "../services/UrlService";
 import { TShortUrl } from "../types/TShortUrl";
+import UrlForm from "./UrlForm";
 
 function shrinkUrl(url: string): string {
   if (url.length <= 33) return url;
   return `${url.slice(0, 30)}...`;
 }
 
-export default function UrlTable(props: { urls: TShortUrl[]; total: number }) {
-  console.log(props.urls, props.total);
+export default function UrlTable(props: { skip: number; take: number }) {
+  const [urls, , refresh] = useUrlHistory(props.skip, props.take);
+  const [edit, setEdit] = useState(false);
+  const [urlToEdit, setUrlToEdit] = useState<TShortUrl | null>(null);
 
   return (
     <Container w="100%">
@@ -35,7 +41,7 @@ export default function UrlTable(props: { urls: TShortUrl[]; total: number }) {
           </tr>
         </thead>
         <tbody>
-          {props.urls.map((u, i) => (
+          {urls.map((u, i) => (
             <tr key={i}>
               <td>
                 <Popover
@@ -70,7 +76,14 @@ export default function UrlTable(props: { urls: TShortUrl[]; total: number }) {
               <td>
                 <Flex justify="center" gap="sm">
                   <Tooltip label="Edit">
-                    <ActionIcon color="indigo" variant="filled">
+                    <ActionIcon
+                      color="indigo"
+                      variant="filled"
+                      onClick={() => {
+                        setEdit(true);
+                        setUrlToEdit(u);
+                      }}
+                    >
                       <IconEdit />
                     </ActionIcon>
                   </Tooltip>
@@ -85,6 +98,23 @@ export default function UrlTable(props: { urls: TShortUrl[]; total: number }) {
           ))}
         </tbody>
       </Table>
+
+      <Modal
+        size="lg"
+        opened={edit}
+        onClose={() => setEdit(false)}
+        title="Editing URL"
+      >
+        {urlToEdit ? (
+          <UrlForm
+            edit={urlToEdit}
+            doneEditing={() => {
+              setEdit(false);
+              refresh();
+            }}
+          />
+        ) : null}
+      </Modal>
     </Container>
   );
 }

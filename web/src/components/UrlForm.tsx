@@ -2,10 +2,7 @@ import {
   Box,
   Button,
   Container,
-  Flex,
   LoadingOverlay,
-  Text,
-  Textarea,
   TextInput,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
@@ -18,7 +15,10 @@ import { TShortUrl } from "../types/TShortUrl";
 import { UrlFormValue } from "../types/TUrlFormValue";
 import InputForm from "./UrlFormMetaInputs";
 
-export default function UrlForm(props?: { edit: TShortUrl }) {
+export default function UrlForm(props?: {
+  edit?: TShortUrl;
+  doneEditing?: () => void;
+}) {
   const form = useMetadataForm(props?.edit);
   const [loading, setLoading] = useState(false);
   const ogInfo = useOgInfo(form.getInputProps("url").value);
@@ -26,7 +26,7 @@ export default function UrlForm(props?: { edit: TShortUrl }) {
   useEffect(() => {
     const url = form.getInputProps("url").value;
     const { ogTitle, ogDescription, ogImage } =
-      props && props.edit.url === url ? props.edit : ogInfo || {};
+      props?.edit && props.edit.url === url ? props.edit : ogInfo || {};
     form.setFieldValue("ogTitle", ogTitle || "");
     form.setFieldValue("ogDescription", ogDescription || "");
     form.setFieldValue("ogImage", ogImage || "");
@@ -36,6 +36,7 @@ export default function UrlForm(props?: { edit: TShortUrl }) {
     setLoading(true);
     try {
       const res = await UrlService.postUrl({
+        id: props?.edit?.id,
         url: values.url,
         ogTitle: values.ogTitle || undefined,
         ogDescription: values.ogDescription || undefined,
@@ -44,10 +45,10 @@ export default function UrlForm(props?: { edit: TShortUrl }) {
       const shorted = `${Envs.SERVER_URL}/${res.id}`;
       const sRes = await Swal.fire({
         icon: "success",
-        title: "URL Shortened!",
+        title: props?.edit ? "Changes saved!" : "URL Shortened!",
         html: `<a href=${shorted} target="_blank">${shorted}</a>`,
         confirmButtonText: "Copy to clipboard!",
-        showCancelButton: true,
+        showCancelButton: !props?.edit,
       });
       if (sRes.isConfirmed) {
         await UrlService.copyToClipboard(shorted);
@@ -61,6 +62,7 @@ export default function UrlForm(props?: { edit: TShortUrl }) {
       });
     }
 
+    props?.doneEditing?.();
     setLoading(false);
   }
 
@@ -74,7 +76,7 @@ export default function UrlForm(props?: { edit: TShortUrl }) {
           {...form.getInputProps("url")}
         />
       </Container>
-      {props ? null : (
+      {props?.edit ? null : (
         <Container ta="center" py="xs">
           <Button
             size="lg"
@@ -89,6 +91,11 @@ export default function UrlForm(props?: { edit: TShortUrl }) {
       <Container py="xl">
         <InputForm form={form} />
       </Container>
+      {props?.doneEditing ? (
+        <Box ta="right">
+          <Button type="submit">Done!</Button>
+        </Box>
+      ) : null}
     </form>
   );
 }
