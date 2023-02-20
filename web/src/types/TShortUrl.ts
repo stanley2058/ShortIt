@@ -2,7 +2,7 @@ export type TShortUrl = {
   id: string; // is also path
   url: string; // target
   userId?: string; // email
-  createAt?: Date;
+  createdAt?: Date;
   views?: number;
   isOgCustom: boolean;
   ogTitle?: string;
