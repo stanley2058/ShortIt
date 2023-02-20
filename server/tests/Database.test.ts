@@ -2,12 +2,12 @@ import { TShortUrl } from "../src/types/TShortUrl";
 import Database from "../src/databases/Database";
 
 describe("database", () => {
-  const url: TShortUrl = {
+  const url = {
     id: "this_is_a_test_record",
     url: "https://google.com",
     userId: "abc@example.com",
     isOgCustom: false,
-  };
+  } satisfies TShortUrl;
 
   beforeAll(async () => {
     await Database.getInstance().connect();
@@ -34,6 +34,11 @@ describe("database", () => {
       1
     );
     expect(resWithLimit).toHaveLength(0);
+  });
+
+  it("gets url counts by user", async () => {
+    const res = await Database.getInstance().countByUser(url.userId);
+    expect(res).toEqual(1);
   });
 
   it("update short url", async () => {
@@ -66,12 +71,19 @@ describe("database", () => {
       "abc@example.com"
     );
     const res5 = await Database.getInstance().getByUrl("https://example.com");
-    expect(res1).toBeTruthy();
-    expect(res1?.id).toEqual(url.id);
+
+    const res6 = await Database.getInstance().getByUrl(
+      "https://example.com",
+      "abc@example.com",
+      true
+    );
+
+    expect(res1).toBeNull();
     expect(res2).toBeNull();
     expect(res3).toBeNull();
-    expect(res4).toStrictEqual(res1);
+    expect(res4).toBeNull();
     expect(res5).toBeNull();
+    expect(res6).toBeTruthy();
   });
 
   it("delete short url by id", async () => {

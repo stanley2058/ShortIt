@@ -84,16 +84,28 @@ export default class Database {
     });
   }
 
+  async countByUser(userId: string): Promise<number> {
+    if (userId === "") 0;
+    return await this.prisma.shortUrl.count({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+
   async getByUrl(
     url: string,
     userId?: string,
-    allowCustomOg = userId === undefined ? false : undefined
+    allowCustomOg = false
   ): Promise<ShortUrl | null> {
     return await this.prisma.shortUrl.findFirst({
       where: {
         url,
         userId: userId || null,
-        isOgCustom: allowCustomOg,
+        isOgCustom: allowCustomOg ? undefined : false,
       },
     });
   }
