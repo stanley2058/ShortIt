@@ -72,7 +72,7 @@ export default function UrlForm(props?: {
       <Container py="xs">
         <TextInput
           size="lg"
-          placeholder="Url to short..."
+          placeholder="URL to short..."
           {...form.getInputProps("url")}
         />
       </Container>

@@ -15,7 +15,7 @@ export default function Home() {
           size={72}
           fw={700}
         >
-          Short That Url!
+          Short That URL!
         </Text>
       </Container>
       <UrlForm />
