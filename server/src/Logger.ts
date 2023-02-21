@@ -1,7 +1,3 @@
-/**
- * Disable no-explicit-any, due to depending methods use any as argument
- */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import log from "npmlog";
 
 const LogLevelList = ["verbose", "info", "warn", "error"] as const;
@@ -17,7 +13,7 @@ function prefixed(prefix: string | (() => string)) {
       return acc;
     },
     {} as {
-      [l in LogLevels]: (message: string, ...args: any[]) => void;
+      [l in LogLevels]: (message: string, ...args: unknown[]) => void;
     }
   );
 }
@@ -46,7 +42,7 @@ const Logger = {
    * @param message Error message
    * @param additionalInfo Any additional information
    */
-  fatal: (message: string, ...additionalInfo: any) => {
+  fatal: (message: string, ...additionalInfo: unknown[]) => {
     Logger.prefixed("FATAL").error(message, additionalInfo);
     Logger.prefixed("FATAL").error(
       "Encountered unrecoverable fatal error, exiting."
