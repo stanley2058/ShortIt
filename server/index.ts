@@ -13,6 +13,7 @@ import OpenGraphService from "./src/OpenGraphService";
 import Database from "./src/databases/Database";
 import { fromShortUrl } from "./src/types/TShortUrl";
 import PageGenerator from "./src/PageGenerator";
+import { TReqOpenGraphUrl } from "./src/types/TOpenGraphUrl";
 
 Logger.setGlobalLogLevel(Env.logLevel);
 Logger.verbose("Configuration loaded:");
@@ -35,7 +36,17 @@ app.get(`${Env.apiPrefix}/user`, requiresAuth(), (req, res) => {
 });
 
 app.post(`${Env.apiPrefix}/url`, async (req, res) => {
-  await UrlService.insertOrUpdateUrl(req, res);
+  const hasLogin = req.oidc.isAuthenticated();
+  const user = hasLogin ? (req.oidc.user as TAuth0User) : undefined;
+  const body: TReqOpenGraphUrl = req.body;
+  if (body === undefined || !UrlService.verifyUrl(body.url)) {
+    res.sendStatus(400);
+    return;
+  }
+
+  const { result, status } = await UrlService.insertOrUpdateUrl(body, user);
+  if (status) res.sendStatus(status);
+  else res.json(result);
 });
 app.get(`${Env.apiPrefix}/url/count`, requiresAuth(), async (req, res) => {
   const user = req.oidc.user as TAuth0User;

@@ -1,4 +1,5 @@
 import Database from "../src/databases/Database";
+import Env from "../src/Env";
 import UrlService from "../src/UrlService";
 
 jest.mock("../src/databases/Connection");
@@ -29,6 +30,15 @@ describe("UrlService", () => {
       id: "Test",
       url: "https://example.com",
     });
+  });
+
+  it("verifies URL", () => {
+    expect(UrlService.verifyUrl("test_string")).toEqual(false);
+    expect(UrlService.verifyUrl("http://google")).toEqual(true);
+    expect(UrlService.verifyUrl("https://google.")).toEqual(true);
+    expect(UrlService.verifyUrl("https://google.com")).toEqual(true);
+    expect(UrlService.verifyUrl("https://google.com?123=456")).toEqual(true);
+    expect(UrlService.verifyUrl(`${Env.baseUrl}/test`)).toEqual(false);
   });
 
   afterAll((done) => {

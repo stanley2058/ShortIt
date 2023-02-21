@@ -1,13 +1,10 @@
 import { ShortUrl } from "@prisma/client";
-import { Request, Response } from "express";
 import Database from "./databases/Database";
-import { TOpenGraphUrl } from "./types/TOpenGraphUrl";
+import { TReqOpenGraphUrl, TResOpenGraphUrl } from "./types/TOpenGraphUrl";
 import { TAuth0User } from "./types/TAuth0User";
 import OpenGraphService from "./OpenGraphService";
 import { fromShortUrl, TShortUrl } from "./types/TShortUrl";
-
-type TReqOpenGraphUrl = TOpenGraphUrl & { id?: string };
-type TResOpenGraphUrl = TOpenGraphUrl & { id: string };
+import Env from "./Env";
 export default class UrlService {
   private static readonly charOpts =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -15,15 +12,10 @@ export default class UrlService {
     ...["user", "counts", "login", "logout", "manage", "about"]
   );
 
-  static async insertOrUpdateUrl(req: Request, res: Response): Promise<void> {
-    const hasLogin = req.oidc.isAuthenticated();
-    const user = hasLogin ? (req.oidc.user as TAuth0User) : undefined;
-    const body: TReqOpenGraphUrl = req.body;
-    if (body === undefined) {
-      res.sendStatus(400);
-      return;
-    }
-
+  static async insertOrUpdateUrl(
+    body: TReqOpenGraphUrl,
+    user?: TAuth0User
+  ): Promise<{ result?: TResOpenGraphUrl; status?: number }> {
     const metadata = await OpenGraphService.getInstance().getOgMetadata(
       body.url
     );
@@ -38,10 +30,7 @@ export default class UrlService {
         body.url,
         user?.email
       );
-      if (existing) {
-        res.json(this.mapShortUrlToResOGUrl(existing));
-        return;
-      }
+      if (existing) return { result: this.mapShortUrlToResOGUrl(existing) };
 
       const created = await Database.getInstance().updateOrInsert({
         ...metadata,
@@ -50,31 +39,21 @@ export default class UrlService {
         isOgCustom,
         userId: user ? user.email : undefined,
       });
-      res.json(this.mapShortUrlToResOGUrl(created));
-      return;
+      return { result: this.mapShortUrlToResOGUrl(created) };
     }
 
     // editing short url
-    if (!hasLogin) {
-      res.sendStatus(401);
-      return;
-    }
+    if (!user) return { status: 401 };
     const existing = await Database.getInstance().get(body.id);
-    if (existing === null) {
-      res.sendStatus(400);
-      return;
-    }
-    if (existing.userId !== user?.email) {
-      res.sendStatus(403);
-      return;
-    }
+    if (existing === null) return { status: 400 };
+    if (existing.userId !== user?.email) return { status: 403 };
 
     const update = await Database.getInstance().updateOrInsert({
       ...this.mapShortUrlToResOGUrl(existing),
       ...body,
       isOgCustom: existing.isOgCustom || isOgCustom,
     });
-    res.json(this.mapShortUrlToResOGUrl(update));
+    return { result: this.mapShortUrlToResOGUrl(update) };
   }
 
   static async getOGUrl(id: string): Promise<TResOpenGraphUrl | null> {
@@ -139,5 +118,20 @@ export default class UrlService {
       ogDescription: sUrl.ogDescription || undefined,
       ogImage: sUrl.ogImage || undefined,
     };
+  }
+
+  /**
+   * Verifies if an URL is valid for ShortIt!
+   * @param url URL to verify
+   * @returns is valid
+   */
+  static verifyUrl(url: string): boolean {
+    try {
+      const toVerify = new URL(url);
+      const base = new URL(Env.baseUrl);
+      return toVerify.host !== base.host;
+    } catch (err) {
+      return false;
+    }
   }
 }
