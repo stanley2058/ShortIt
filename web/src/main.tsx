@@ -1,4 +1,3 @@
-import { MantineProvider } from "@mantine/core";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
@@ -25,20 +24,14 @@ const router = [
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <MantineProvider
-      theme={{ colorScheme: "dark" }}
-      withGlobalStyles
-      withNormalizeCSS
-    >
-      <BrowserRouter>
-        <Header>
-          <Routes>
-            {router.map((r) => (
-              <Route key={r.path} {...r} />
-            ))}
-          </Routes>
-        </Header>
-      </BrowserRouter>
-    </MantineProvider>
+    <BrowserRouter>
+      <Header>
+        <Routes>
+          {router.map((r) => (
+            <Route key={r.path} {...r} />
+          ))}
+        </Routes>
+      </Header>
+    </BrowserRouter>
   </React.StrictMode>
 );

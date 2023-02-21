@@ -1,15 +1,12 @@
 import { Title, Text } from "@mantine/core";
-import { Step, Styles } from "react-joyride";
-
-const styles: Styles = {};
-const tooltipStyle: React.CSSProperties = {};
+import { Step } from "react-joyride";
 
 export default function Tour(): Step[] {
   return [
     {
       content: (
         <>
-          <Title order={2}>Welcome to SortIt!</Title>
+          <Title>Welcome to SortIt!</Title>
           <Text>Want to take a quick tour?</Text>
         </>
       ),
@@ -22,11 +19,6 @@ export default function Tour(): Step[] {
       disableOverlayClose: true,
       placement: "center",
       target: "body",
-      styles: {
-        tooltip: {
-          backgroundColor: "black",
-        },
-      },
     },
     {
       content: <Text>Paste your URL here.</Text>,

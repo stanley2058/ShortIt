@@ -1,4 +1,12 @@
-import { ActionIcon, Anchor, Avatar, Flex, Menu, Tooltip } from "@mantine/core";
+import {
+  ActionIcon,
+  Anchor,
+  Avatar,
+  Flex,
+  Menu,
+  Tooltip,
+  useMantineColorScheme,
+} from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -6,11 +14,14 @@ import {
   IconLogout,
   IconInfoSquare,
   IconTools,
+  IconMoonStars,
+  IconSun,
 } from "@tabler/icons-react";
 import Envs from "../Envs";
 import useUserInfo from "../hooks/useUserInfo";
 
 export default function User() {
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const [userInfo, isLoading] = useUserInfo();
   const [hasLogin, setHasLogin] = useState(false);
   const navigate = useNavigate();
@@ -23,6 +34,15 @@ export default function User() {
 
   return (
     <Flex gap="md" align="center">
+      <Tooltip label="Switch theme">
+        <ActionIcon
+          color={colorScheme === "dark" ? "yellow" : "blue"}
+          onClick={() => toggleColorScheme()}
+          title="Toggle color scheme"
+        >
+          {colorScheme === "dark" ? <IconSun /> : <IconMoonStars />}
+        </ActionIcon>
+      </Tooltip>
       <Tooltip label="About" onClick={() => navigate("/about")}>
         <ActionIcon color="cyan" variant="subtle">
           <IconInfoSquare />
