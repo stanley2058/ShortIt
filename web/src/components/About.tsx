@@ -21,7 +21,7 @@ import {
 
 export default function About() {
   const frontend = [
-    <ReactJs key="React.js" color="default" title="React.js" size="4rem" />,
+    <ReactJs key="React.js" color="#61DAFB" title="React.js" size="4rem" />,
     <Image
       key="Mantine"
       title="Mantine"
@@ -29,21 +29,21 @@ export default function About() {
       width="4rem"
       height="auto"
     />,
-    <Auth0 color="default" key="Auth0" title="Auth0" size="4rem" />,
+    <Auth0 color="#EB5424" key="Auth0" title="Auth0" size="4rem" />,
 
-    <Figma color="default" key="Figma" title="Figma" size="4rem" />,
+    <Figma color="#F24E1E" key="Figma" title="Figma" size="4rem" />,
   ];
   const backend = [
-    <Nodedotjs key="Node.js" color="default" title="Node.js" size="4rem" />,
-    <Express key="Express.js" color="default" title="Express.js" size="4rem" />,
-    <Prisma key="Prisma" color="default" title="Prisma" size="4rem" />,
+    <Nodedotjs key="Node.js" color="#339933" title="Node.js" size="4rem" />,
+    <Express key="Express.js" color="#000000" title="Express.js" size="4rem" />,
+    <Prisma key="Prisma" color="#2D3748" title="Prisma" size="4rem" />,
     <Postgresql
       key="PostgreSQL"
-      color="default"
+      color="#4169E1"
       title="PostgreSQL"
       size="4rem"
     />,
-    <Redis key="Redis" color="default" title="Redis" size="4rem" />,
+    <Redis key="Redis" color="#DC382D" title="Redis" size="4rem" />,
   ];
 
   return (
