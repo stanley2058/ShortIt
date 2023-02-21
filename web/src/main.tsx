@@ -6,6 +6,7 @@ import Manage from "./components/Manage";
 import "./index.css";
 import Header from "./components/Header";
 import About from "./components/About";
+import NotFound from "./components/404";
 
 const router = [
   {
@@ -19,6 +20,10 @@ const router = [
   {
     path: "/about",
     element: <About />,
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ];
 
