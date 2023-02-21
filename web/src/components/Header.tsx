@@ -10,7 +10,6 @@ import {
 import { PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
 import User from "./User";
-// eslint-disable-next-line import/no-absolute-path
 import logo from "/shortit.svg";
 
 export default function Header(props: PropsWithChildren) {

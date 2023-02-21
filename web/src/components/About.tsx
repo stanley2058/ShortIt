@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-absolute-path
 import {
   Container,
   Card,
@@ -8,7 +7,6 @@ import {
   Title,
   Anchor,
 } from "@mantine/core";
-// eslint-disable-next-line import/no-absolute-path
 import logo from "/shortit.svg";
 import {
   Sireact,
