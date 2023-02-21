@@ -12,6 +12,7 @@ import path from "path";
 import OpenGraphService from "./src/OpenGraphService";
 import Database from "./src/databases/Database";
 import { fromShortUrl } from "./src/types/TShortUrl";
+import PageGenerator from "./src/PageGenerator";
 
 Logger.setGlobalLogLevel(Env.logLevel);
 Logger.verbose("Configuration loaded:");
@@ -90,8 +91,8 @@ app.get("/:id", async (req, res, next) => {
     views: existing.views + 1,
   });
 
-  // TODO: implement redirect html page generator
-  res.contentType("html").send("<html><body>Placeholder</body></html>");
+  if (!existing.isOgCustom) res.redirect(existing.url);
+  else res.contentType("html").send(PageGenerator.generate(shortUrl));
 });
 
 // serve SPA webpage
