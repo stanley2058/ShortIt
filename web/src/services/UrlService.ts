@@ -1,6 +1,8 @@
+import Swal from "sweetalert2";
 import { TOpenGraphUrl } from "../types/TOpenGraphUrl";
 import Envs from "../Envs";
 import { TShortUrl } from "../types/TShortUrl";
+import { UrlFormValue } from "../types/TUrlFormValue";
 
 type ReqOgUrl = TOpenGraphUrl & { id?: string };
 type ResOgUrl = TOpenGraphUrl & { id: string };
@@ -19,6 +21,40 @@ export default class UrlService {
   private static readonly errorUnknown = new Error(
     "an unknown error has occurred"
   );
+
+  static async submit(
+    values: UrlFormValue,
+    edit?: TShortUrl
+  ): Promise<boolean> {
+    try {
+      const res = await UrlService.postUrl({
+        id: edit?.id,
+        url: values.url,
+        ogTitle: values.ogTitle || undefined,
+        ogDescription: values.ogDescription || undefined,
+        ogImage: values.ogImage || undefined,
+      });
+      const shorted = `${Envs.SERVER_URL}/${res.id}`;
+      const sRes = await Swal.fire({
+        icon: "success",
+        title: edit ? "Changes saved!" : "URL Shortened!",
+        html: `<a href=${shorted} target="_blank">${shorted}</a>`,
+        confirmButtonText: "Copy to clipboard!",
+        showCancelButton: !edit,
+      });
+      if (sRes.isConfirmed) {
+        await UrlService.copyToClipboard(shorted);
+        return true;
+      }
+    } catch (err) {
+      await Swal.fire({
+        icon: "error",
+        title: "Oh no! Something went wrong.",
+        text: (err as Error).message,
+      });
+    }
+    return false;
+  }
 
   /**
    * Verifies if an URL is valid for ShortIt!
