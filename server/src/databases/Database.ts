@@ -4,8 +4,8 @@ import Redis from "ioredis";
 import { createPrismaRedisCache } from "prisma-redis-middleware";
 // apply fixes from https://github.com/Asjas/prisma-redis-middleware/issues/230
 import type TRedis from "prisma-redis-middleware/node_modules/ioredis/built";
-import Env from "../Env";
 import Logger from "../Logger";
+import Connection from "./Connection";
 
 export default class Database {
   private static instance?: Database;
@@ -20,12 +20,11 @@ export default class Database {
 
   private constructor() {
     try {
-      this.redis = new Redis(Env.redisUri);
+      const con = new Connection();
+      this.redis = con.getRedis();
       this.connectionStatus.redis = true;
-      Logger.verbose("connected to redis");
-      this.prisma = new PrismaClient();
+      this.prisma = con.getPrisma();
       this.connectionStatus.prisma = true;
-      Logger.verbose("connected to postgres");
 
       const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
         models: [{ model: "ShortUrl", excludeMethods: ["findMany"] }],

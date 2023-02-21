@@ -1,5 +1,4 @@
 import Redis from "ioredis";
-import Env from "./Env";
 import Logger from "./Logger";
 import NodeDomParser from "dom-parser";
 import { TOpenGraphUrl } from "./types/TOpenGraphUrl";
@@ -17,6 +16,7 @@ import spotify from "metascraper-spotify";
 import soundcloud from "metascraper-soundcloud";
 import amazon from "metascraper-amazon";
 import instagram from "metascraper-instagram";
+import Connection from "./databases/Connection";
 
 export default class OpenGraphService {
   private static instance?: OpenGraphService;
@@ -28,7 +28,8 @@ export default class OpenGraphService {
 
   private constructor() {
     try {
-      this.redis = new Redis(Env.redisUri);
+      const con = new Connection();
+      this.redis = con.getRedis();
       this.hasConnected = true;
       Logger.verbose("connected to redis (OG cache)");
 
