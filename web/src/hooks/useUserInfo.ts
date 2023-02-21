@@ -20,6 +20,8 @@ export default function useUserInfo() {
       try {
         const userInfo = await fetchUserInfo();
         setUser(userInfo);
+      } catch (err) {
+        // invalid user
       } finally {
         setIsLoading(false);
       }
