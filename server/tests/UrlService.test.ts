@@ -1,6 +1,8 @@
 import Database from "../src/databases/Database";
 import UrlService from "../src/UrlService";
 
+jest.mock("../src/databases/Connection");
+
 describe("UrlService", () => {
   beforeAll(async () => {
     await Database.getInstance().connect();

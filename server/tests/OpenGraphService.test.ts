@@ -1,5 +1,7 @@
 import OpenGraphService from "../src/OpenGraphService";
 
+jest.mock("../src/databases/Connection");
+
 describe("OpenGraphService", () => {
   beforeAll(async () => {
     await OpenGraphService.getInstance().connect();

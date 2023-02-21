@@ -1,6 +1,8 @@
 import { TShortUrl } from "../src/types/TShortUrl";
 import Database from "../src/databases/Database";
 
+jest.mock("../src/databases/Connection");
+
 describe("database", () => {
   const url = {
     id: "this_is_a_test_record",
