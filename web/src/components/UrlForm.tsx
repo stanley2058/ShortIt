@@ -7,11 +7,12 @@ import {
   Divider,
   Flex,
   LoadingOverlay,
+  Text,
   TextInput,
   Tooltip,
 } from "@mantine/core";
-import { useEffect, useState } from "react";
-import Joyride, { CallBackProps } from "react-joyride";
+import { lazy, Suspense, useEffect, useState } from "react";
+import { CallBackProps } from "react-joyride";
 import { IconQuestionMark } from "@tabler/icons-react";
 import useMetadataForm from "../hooks/useMetadataForm";
 import useOgInfo from "../hooks/useOgInfo";
@@ -22,6 +23,8 @@ import InputForm from "./UrlFormMetaInputs";
 import Tour from "./Tour";
 import JoyrideHandler from "../services/JoyrideHandler";
 import useColorScheme, { getTheme } from "../hooks/useColorScheme";
+
+const Joyride = lazy(() => import("react-joyride"));
 
 const key = "showedTour";
 function firstVisit() {
@@ -94,15 +97,17 @@ export default function UrlForm(props?: {
   return (
     <form id="inputForm" onSubmit={form.onSubmit(onSubmit)}>
       {!props?.edit && enableTour ? (
-        <Joyride
-          callback={handleJoyrideCallback}
-          continuous
-          run={runTour}
-          scrollToFirstStep
-          showProgress
-          showSkipButton
-          steps={tour}
-        />
+        <Suspense fallback={<Text>Loading tour...</Text>}>
+          <Joyride
+            callback={handleJoyrideCallback}
+            continuous
+            run={runTour}
+            scrollToFirstStep
+            showProgress
+            showSkipButton
+            steps={tour}
+          />
+        </Suspense>
       ) : null}
       <LoadingOverlay visible={loading} overlayBlur={2} />
       <Container py="xs">

@@ -9,19 +9,19 @@ import {
 } from "@mantine/core";
 import logo from "/shortit.svg";
 import {
-  Sireact,
-  Siauth0,
-  Sifigma,
-  Siredis,
-  Sipostgresql,
-  Siprisma,
-  Sinodedotjs,
-  Siexpress,
+  ReactJs,
+  Auth0,
+  Figma,
+  Redis,
+  Postgresql,
+  Prisma,
+  Nodedotjs,
+  Express,
 } from "@icons-pack/react-simple-icons";
 
 export default function About() {
   const frontend = [
-    <Sireact key="React.js" color="default" title="React.js" size="4rem" />,
+    <ReactJs key="React.js" color="default" title="React.js" size="4rem" />,
     <Image
       key="Mantine"
       title="Mantine"
@@ -29,26 +29,21 @@ export default function About() {
       width="4rem"
       height="auto"
     />,
-    <Siauth0 color="default" key="Auth0" title="Auth0" size="4rem" />,
+    <Auth0 color="default" key="Auth0" title="Auth0" size="4rem" />,
 
-    <Sifigma color="default" key="Figma" title="Figma" size="4rem" />,
+    <Figma color="default" key="Figma" title="Figma" size="4rem" />,
   ];
   const backend = [
-    <Sinodedotjs key="Node.js" color="default" title="Node.js" size="4rem" />,
-    <Siexpress
-      key="Express.js"
-      color="default"
-      title="Express.js"
-      size="4rem"
-    />,
-    <Siprisma key="Prisma" color="default" title="Prisma" size="4rem" />,
-    <Sipostgresql
+    <Nodedotjs key="Node.js" color="default" title="Node.js" size="4rem" />,
+    <Express key="Express.js" color="default" title="Express.js" size="4rem" />,
+    <Prisma key="Prisma" color="default" title="Prisma" size="4rem" />,
+    <Postgresql
       key="PostgreSQL"
       color="default"
       title="PostgreSQL"
       size="4rem"
     />,
-    <Siredis key="Redis" color="default" title="Redis" size="4rem" />,
+    <Redis key="Redis" color="default" title="Redis" size="4rem" />,
   ];
 
   return (

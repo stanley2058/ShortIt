@@ -1,12 +1,14 @@
-import React from "react";
+import { Text } from "@mantine/core";
+import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
-import Home from "./components/Home";
-import Manage from "./components/Manage";
 import "./index.css";
-import Header from "./components/Header";
-import About from "./components/About";
-import NotFound from "./components/404";
+
+const Home = lazy(() => import("./components/Home"));
+const Manage = lazy(() => import("./components/Manage"));
+const Header = lazy(() => import("./components/Header"));
+const About = lazy(() => import("./components/About"));
+const NotFound = lazy(() => import("./components/404"));
 
 const router = [
   {
@@ -31,11 +33,13 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <Header>
-        <Routes>
-          {router.map((r) => (
-            <Route key={r.path} {...r} />
-          ))}
-        </Routes>
+        <Suspense fallback={<Text>Loading body...</Text>}>
+          <Routes>
+            {router.map((r) => (
+              <Route key={r.path} {...r} />
+            ))}
+          </Routes>
+        </Suspense>
       </Header>
     </BrowserRouter>
   </React.StrictMode>
