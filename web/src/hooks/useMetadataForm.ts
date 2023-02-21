@@ -15,7 +15,7 @@ export default function useMetadataForm(
     },
 
     validate: {
-      url: (value) => (UrlService.verifyUrl(value) ? null : "Invalid URL"),
+      url: (value) => UrlService.verifyUrl(value)[1],
       ogImage: (value) =>
         value ? (UrlService.verifyUrl(value) ? null : "Invalid URL") : null,
     },

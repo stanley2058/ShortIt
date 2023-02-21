@@ -8,12 +8,12 @@ import UrlService from "../services/UrlService";
 export default function OgPreview(props: { ogMeta: TOpenGraphUrl }) {
   const [imgUrl, setImgUrl] = useState(placeholder);
   useEffect(() => {
-    const urlValid = UrlService.verifyUrl(props.ogMeta.ogImage || "");
+    const urlValid = UrlService.verifyUrl(props.ogMeta.ogImage || "")[0];
     if (!urlValid) setImgUrl(placeholder);
     else setImgUrl(props.ogMeta.ogImage || placeholder);
   }, [props]);
 
-  const siteUrl = UrlService.verifyUrl(props.ogMeta.url)
+  const siteUrl = UrlService.verifyUrl(props.ogMeta.url)[0]
     ? props.ogMeta.url
     : "https://example.com";
 

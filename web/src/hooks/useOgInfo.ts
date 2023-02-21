@@ -14,7 +14,7 @@ export default function useOgInfo(url: string) {
 
   useEffect(() => {
     (async () => {
-      if (UrlService.verifyUrl(url)) setOgInfo(await fetchOgInfo(url));
+      if (UrlService.verifyUrl(url)[0]) setOgInfo(await fetchOgInfo(url));
       else if (ogInfo) setOgInfo(null);
     })();
   }, [url]);

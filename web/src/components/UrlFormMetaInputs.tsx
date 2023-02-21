@@ -16,7 +16,7 @@ export default function InputForm(props: {
     label: name,
     placeholder: `Preview ${name}`,
     ...props.form.getInputProps(path),
-    disabled: !UrlService.verifyUrl(props.form.getInputProps("url").value),
+    disabled: !UrlService.verifyUrl(props.form.getInputProps("url").value)[0],
   }));
 
   return (

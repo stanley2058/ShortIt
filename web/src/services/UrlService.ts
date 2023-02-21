@@ -20,13 +20,19 @@ export default class UrlService {
     "an unknown error has occurred"
   );
 
-  static verifyUrl(url: string): boolean {
+  /**
+   * Verifies if an URL is valid for ShortIt!
+   * @param url URL to verify
+   * @returns [isValid, invalid reason]
+   */
+  static verifyUrl(url: string): [boolean, string | null] {
     try {
-      // eslint-disable-next-line no-new
-      new URL(url);
-      return true;
+      const toVerify = new URL(url);
+      const base = new URL(Envs.SERVER_URL);
+      const isValid = toVerify.host !== base.host;
+      return [isValid, isValid ? null : "Cannot short an URL from ShortIt!"];
     } catch (err) {
-      return false;
+      return [false, "Invalid URL"];
     }
   }
 
