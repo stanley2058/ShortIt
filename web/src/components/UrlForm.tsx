@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Box,
   Button,
   Collapse,
@@ -11,6 +12,8 @@ import {
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import Joyride, { CallBackProps } from "react-joyride";
+import { IconQuestionMark } from "@tabler/icons-react";
 import Envs from "../Envs";
 import useMetadataForm from "../hooks/useMetadataForm";
 import useOgInfo from "../hooks/useOgInfo";
@@ -18,6 +21,14 @@ import UrlService from "../services/UrlService";
 import { TShortUrl } from "../types/TShortUrl";
 import { UrlFormValue } from "../types/TUrlFormValue";
 import InputForm from "./UrlFormMetaInputs";
+import Tour from "./Tour";
+
+function firstVisit() {
+  const key = "showedTour";
+  const res = localStorage.getItem(key);
+  localStorage.setItem(key, "");
+  return res === null;
+}
 
 export default function UrlForm(props?: {
   edit?: TShortUrl;
@@ -26,6 +37,8 @@ export default function UrlForm(props?: {
   const form = useMetadataForm(props?.edit);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [enableTour, setEnableTour] = useState(firstVisit());
+  const [runTour, setRunTour] = useState(enableTour);
   const ogInfo = useOgInfo(form.getInputProps("url").value);
 
   useEffect(() => {
@@ -71,19 +84,67 @@ export default function UrlForm(props?: {
     setLoading(false);
   }
 
+  function handleJoyrideCallback(data: CallBackProps) {
+    if (data.index === 2 && data.lifecycle === "complete") {
+      setRunTour(false);
+      setShowAdvanced(true);
+      setTimeout(() => setRunTour(true), 500);
+    }
+    if (data.index === 6 && data.lifecycle === "ready") {
+      form.setFieldValue("url", "https://ogp.me");
+    }
+    if (data.index === 6 && data.lifecycle === "complete") {
+      setRunTour(false);
+      setShowAdvanced(false);
+      form.reset();
+      setTimeout(() => setRunTour(true), 500);
+    }
+  }
+
+  function startTour() {
+    if (runTour) setRunTour(false);
+    setTimeout(() => {
+      setEnableTour(true);
+      setRunTour(true);
+    }, 0);
+  }
+
   return (
-    <form onSubmit={form.onSubmit(onSubmit)}>
+    <form id="inputForm" onSubmit={form.onSubmit(onSubmit)}>
+      {enableTour ? (
+        <Joyride
+          callback={handleJoyrideCallback}
+          continuous
+          run={runTour}
+          scrollToFirstStep
+          showProgress
+          showSkipButton
+          steps={Tour()}
+        />
+      ) : null}
       <LoadingOverlay visible={loading} overlayBlur={2} />
       <Container py="xs">
         <TextInput
+          id="urlInput"
           size="lg"
           placeholder="URL to short..."
           {...form.getInputProps("url")}
         />
       </Container>
+      <Container>
+        <Flex justify="flex-end">
+          <Tooltip label="Start tour">
+            <ActionIcon id="btnStartTour" variant="outline" onClick={startTour}>
+              <IconQuestionMark />
+            </ActionIcon>
+          </Tooltip>
+        </Flex>
+      </Container>
+
       {props?.edit ? null : (
         <Container ta="center" py="xs">
           <Button
+            id="submitBtn"
             size="lg"
             variant="gradient"
             gradient={{ from: "indigo", to: "cyan", deg: 140 }}
@@ -97,6 +158,7 @@ export default function UrlForm(props?: {
         <Flex justify="center" pb="md">
           <Tooltip label="Add your own OpenGraph metadata!">
             <Button
+              id="customBtn"
               variant="outline"
               color={showAdvanced ? "orange" : "cyan"}
               onClick={() => setShowAdvanced(!showAdvanced)}
