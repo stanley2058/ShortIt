@@ -23,11 +23,12 @@ import Tour from "./Tour";
 import JoyrideHandler from "../services/JoyrideHandler";
 import useColorScheme, { getTheme } from "../hooks/useColorScheme";
 
+const key = "showedTour";
 function firstVisit() {
-  const key = "showedTour";
-  const res = localStorage.getItem(key);
+  return localStorage.getItem(key) === null;
+}
+function setVisit() {
   localStorage.setItem(key, "");
-  return res === null;
 }
 
 export default function UrlForm(props?: {
@@ -74,6 +75,7 @@ export default function UrlForm(props?: {
   }
 
   function handleJoyrideCallback(data: CallBackProps) {
+    if (firstVisit()) setVisit();
     joyrideHandler.handles({
       ...data,
       isAdvVisible: showAdvanced,
