@@ -10,21 +10,18 @@ import {
   ColorSchemeProvider,
   ColorScheme,
 } from "@mantine/core";
-import { useColorScheme, useLocalStorage } from "@mantine/hooks";
 import { PropsWithChildren } from "react";
 import { useNavigate } from "react-router-dom";
+import useColorScheme from "../hooks/useColorScheme";
 import User from "./User";
 import logo from "/shortit.svg";
 
 export default function Header(props: PropsWithChildren) {
   const navigate = useNavigate();
-  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
-    key: "mantine-color-scheme",
-    defaultValue: useColorScheme("dark"),
-    getInitialValueInEffect: true,
-  });
-  const toggleColorScheme = (value?: ColorScheme) =>
+  const [colorScheme, setColorScheme] = useColorScheme();
+  const toggleColorScheme = (value?: ColorScheme) => {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
+  };
 
   return (
     <ColorSchemeProvider
