@@ -91,7 +91,7 @@ export default function UrlForm(props?: {
 
   return (
     <form id="inputForm" onSubmit={form.onSubmit(onSubmit)}>
-      {enableTour ? (
+      {!props?.edit && enableTour ? (
         <Joyride
           callback={handleJoyrideCallback}
           continuous
@@ -111,20 +111,22 @@ export default function UrlForm(props?: {
           {...form.getInputProps("url")}
         />
       </Container>
-      <Container>
-        <Flex justify="flex-end">
-          <Tooltip label="Start tour">
-            <ActionIcon
-              id="btnStartTour"
-              variant="outline"
-              onClick={startTour}
-              disabled={tourRunning}
-            >
-              <IconQuestionMark />
-            </ActionIcon>
-          </Tooltip>
-        </Flex>
-      </Container>
+      {!props?.edit ? (
+        <Container>
+          <Flex justify="flex-end">
+            <Tooltip label="Start tour">
+              <ActionIcon
+                id="btnStartTour"
+                variant="outline"
+                onClick={startTour}
+                disabled={tourRunning}
+              >
+                <IconQuestionMark />
+              </ActionIcon>
+            </Tooltip>
+          </Flex>
+        </Container>
+      ) : null}
 
       {props?.edit ? null : (
         <Container ta="center" py="xs">
