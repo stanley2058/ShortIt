@@ -82,7 +82,7 @@ export default class OpenGraphService {
         ogImage: metadata.image || undefined,
       };
     } catch (err) {
-      Logger.warn(`error occurs fetching open graph metadata from: ${url}`);
+      Logger.verbose(`error occurs fetching open graph metadata from: ${url}`);
       Logger.plain.verbose("", err);
     }
     return null;
