@@ -1,10 +1,10 @@
-import { Container, Text } from "@mantine/core";
+import { Container, Flex, Text } from "@mantine/core";
 import UrlForm from "./UrlForm";
 
 export default function Home() {
   return (
-    <>
-      <Container py="lg">
+    <Flex direction="column" justify="center">
+      <Container pb="lg">
         <Text
           variant="gradient"
           sx={{
@@ -19,6 +19,6 @@ export default function Home() {
         </Text>
       </Container>
       <UrlForm />
-    </>
+    </Flex>
   );
 }

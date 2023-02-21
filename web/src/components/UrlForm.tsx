@@ -1,9 +1,13 @@
 import {
   Box,
   Button,
+  Collapse,
   Container,
+  Divider,
+  Flex,
   LoadingOverlay,
   TextInput,
+  Tooltip,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -20,6 +24,7 @@ export default function UrlForm(props?: {
   doneEditing?: () => void;
 }) {
   const form = useMetadataForm(props?.edit);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [loading, setLoading] = useState(false);
   const ogInfo = useOgInfo(form.getInputProps("url").value);
 
@@ -89,7 +94,21 @@ export default function UrlForm(props?: {
         </Container>
       )}
       <Container py="xl">
-        <InputForm form={form} />
+        <Flex justify="center" pb="md">
+          <Tooltip label="Add your own OpenGraph metadata!">
+            <Button
+              variant="outline"
+              color={showAdvanced ? "orange" : "cyan"}
+              onClick={() => setShowAdvanced(!showAdvanced)}
+            >
+              {showAdvanced ? "Hide" : "Show"} customization options
+            </Button>
+          </Tooltip>
+        </Flex>
+        <Collapse in={showAdvanced}>
+          <Divider my="sm" variant="dashed" />
+          <InputForm form={form} />
+        </Collapse>
       </Container>
       {props?.doneEditing ? (
         <Box ta="right">
