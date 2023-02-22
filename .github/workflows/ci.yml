@@ -15,8 +15,10 @@ jobs:
       - name: Login to Registry
         uses: docker/login-action@v2
         with:
-          registry: reg.stw.tw
-          username: ${{ secrets.REG_USER }}
-          password: ${{ secrets.REG_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Test/Build/Tag/Push
+        env:
+          REGISTRY: ghcr.io/stanley2058
         run: ./build-all.sh
