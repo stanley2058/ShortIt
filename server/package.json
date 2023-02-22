@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "ts-node .",
+    "build": "tsc -b --verbose --diagnostics",
     "test": "jest --verbose",
     "test-watch": "jest --watchAll --verbose --detectOpenHandles",
     "coverage": "jest --verbose --coverage",
