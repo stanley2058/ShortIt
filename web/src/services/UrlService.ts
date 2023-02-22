@@ -1,4 +1,5 @@
-import Swal from "sweetalert2";
+// eslint-disable-next-line import/extensions, @typescript-eslint/ban-ts-comment
+import Swal from "sweetalert2/dist/sweetalert2.js";
 import { TOpenGraphUrl } from "../types/TOpenGraphUrl";
 import Envs from "../Envs";
 import { TShortUrl } from "../types/TShortUrl";

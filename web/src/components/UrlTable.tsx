@@ -12,7 +12,8 @@ import {
 } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
-import Swal from "sweetalert2";
+// eslint-disable-next-line import/extensions, @typescript-eslint/ban-ts-comment
+import Swal from "sweetalert2/dist/sweetalert2.js";
 import Envs from "../Envs";
 import useUrlHistory from "../hooks/useUrlHistory";
 import UrlService from "../services/UrlService";
