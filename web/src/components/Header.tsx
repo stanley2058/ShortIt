@@ -10,18 +10,31 @@ import {
   ColorSchemeProvider,
   ColorScheme,
 } from "@mantine/core";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useColorScheme from "../hooks/useColorScheme";
 import User from "./User";
 import logo from "/shortit.svg";
 
+function handleSweetalertTheme(theme: ColorScheme) {
+  const style = document.getElementById("sweetalert-theme") as HTMLLinkElement;
+  const url = `https://cdn.jsdelivr.net/npm/@sweetalert2/${
+    theme === "dark"
+      ? "theme-dark/dark.min.css"
+      : "theme-default/default.min.css"
+  }`;
+  style.href = url;
+}
+
 export default function Header(props: PropsWithChildren) {
   const navigate = useNavigate();
-  const [colorScheme, setColorScheme] = useColorScheme();
+  const [colorScheme, setColorScheme, unsubscribe] = useColorScheme(
+    handleSweetalertTheme
+  );
   const toggleColorScheme = (value?: ColorScheme) => {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
   };
+  useEffect(() => unsubscribe, []);
 
   return (
     <ColorSchemeProvider
