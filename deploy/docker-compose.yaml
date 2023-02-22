@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  redis:
+    image: redis
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis:/data
+  postgresql:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+  shortit:
+    image: reg.stw.tw/short-it
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    environment:
+      - REDIS_URI=redis://redis:6379
+      - DATABASE_URL
+      - PORT
+      - BASE_URL
+      - API_VERSION
+      - LOG_LEVEL
+      - AUTH0_CLIENT_ID
+      - AUTH0_URI
+      - SECRET
+      - LOGIN_RETURN_URL
+      - LOGOUT_RETURN_URL
