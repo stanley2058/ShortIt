@@ -15,7 +15,6 @@ import { useState } from "react";
 // eslint-disable-next-line import/extensions, @typescript-eslint/ban-ts-comment
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import Envs from "../Envs";
-import useUrlHistory from "../hooks/useUrlHistory";
 import UrlService from "../services/UrlService";
 import { TShortUrl } from "../types/TShortUrl";
 import UrlForm from "./UrlForm";
@@ -25,8 +24,10 @@ function shrinkUrl(url: string): string {
   return `${url.slice(0, 30)}...`;
 }
 
-export default function UrlTable(props: { skip: number; take: number }) {
-  const [urls, , refresh] = useUrlHistory(props.skip, props.take);
+export default function UrlTable(props: {
+  urls: TShortUrl[];
+  refresh: () => void;
+}) {
   const [edit, setEdit] = useState(false);
   const [urlToEdit, setUrlToEdit] = useState<TShortUrl | null>(null);
 
@@ -43,7 +44,7 @@ export default function UrlTable(props: { skip: number; take: number }) {
     if (confirmRes.isDenied || confirmRes.isDismissed) return;
     try {
       await UrlService.deleteUrl(url.id);
-      refresh();
+      props.refresh();
     } catch (err) {
       await Swal.fire({
         icon: "error",
@@ -68,7 +69,7 @@ export default function UrlTable(props: { skip: number; take: number }) {
           </tr>
         </thead>
         <tbody>
-          {urls.map((u, i) => (
+          {props.urls.map((u, i) => (
             <tr key={i}>
               <td>
                 <Popover
@@ -144,7 +145,7 @@ export default function UrlTable(props: { skip: number; take: number }) {
             edit={urlToEdit}
             doneEditing={() => {
               setEdit(false);
-              refresh();
+              props.refresh();
             }}
           />
         ) : null}
