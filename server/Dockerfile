@@ -1,5 +1,6 @@
-FROM reg.stw.tw/short-it-web as web
-FROM reg.stw.tw/short-it-base as build
+ARG REPO=reg.stw.tw
+FROM ${REPO}/short-it-web as web
+FROM ${REPO}/short-it-base as build
 COPY . .
 RUN ["npm", "i"]
 RUN ["npm", "run", "db:generate"]
