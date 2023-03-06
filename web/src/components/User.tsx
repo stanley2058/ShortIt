@@ -7,7 +7,7 @@ import {
   Tooltip,
   useMantineColorScheme,
 } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   IconLogin,
@@ -18,11 +18,11 @@ import {
   IconSun,
 } from "@tabler/icons-react";
 import Envs from "../Envs";
-import useUserInfo from "../hooks/useUserInfo";
+import UserContext from "../context/User";
 
 export default function User() {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const [userInfo, isLoading] = useUserInfo();
+  const [userInfo, isLoading] = useContext(UserContext);
   const [hasLogin, setHasLogin] = useState(false);
   const navigate = useNavigate();
 

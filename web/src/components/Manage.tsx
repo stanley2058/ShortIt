@@ -1,13 +1,13 @@
 import { Button, Flex, Pagination, Text, Title } from "@mantine/core";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import UserContext from "../context/User";
 import useUrlHistory from "../hooks/useUrlHistory";
-import useUserInfo from "../hooks/useUserInfo";
 import UrlTable from "./UrlTable";
 
 export default function Manage() {
   const navigate = useNavigate();
-  const [user, isLoading] = useUserInfo();
+  const [user, isLoading] = useContext(UserContext);
 
   useEffect(() => {
     if (!isLoading && !user) navigate("/");
