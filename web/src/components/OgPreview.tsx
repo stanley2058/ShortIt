@@ -28,7 +28,7 @@ export default function OgPreview(props: { ogMeta: TOpenGraphUrl }) {
         />
       </Card.Section>
 
-      <Text weight={500} size="lg" mt="md">
+      <Text weight={500} size="lg" mt="md" sx={{ wordWrap: "break-word" }}>
         {props.ogMeta.ogTitle || "Title Placeholder"}
       </Text>
 
@@ -36,7 +36,13 @@ export default function OgPreview(props: { ogMeta: TOpenGraphUrl }) {
         {props.ogMeta.ogDescription || "Description Placeholder"}
       </Text>
 
-      <Text size="sm" fs="italic" color="blue" pt="sm">
+      <Text
+        size="sm"
+        fs="italic"
+        color="blue"
+        pt="sm"
+        sx={{ wordWrap: "break-word" }}
+      >
         {siteUrl}
       </Text>
     </Card>
