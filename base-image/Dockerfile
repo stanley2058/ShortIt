@@ -1,5 +1,6 @@
 ARG REPO=reg.stw.tw
 FROM ${REPO}/short-it-base
+RUN ["npm", "i", "-g", "pnpm"]
 WORKDIR /shortit
 COPY . .
-RUN ["npm", "i", "-g", "pnpm"]
+RUN ["pnpm", "i"]

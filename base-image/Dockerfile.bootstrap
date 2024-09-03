@@ -1,4 +1,5 @@
 FROM node:lts-alpine
+RUN ["npm", "i", "-g", "pnpm"]
 WORKDIR /shortit
 COPY . .
 RUN ["pnpm", "i"]
