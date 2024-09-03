@@ -17,6 +17,7 @@ import soundcloud from "metascraper-soundcloud";
 import amazon from "metascraper-amazon";
 import instagram from "metascraper-instagram";
 import Connection from "./databases/Connection";
+import UrlService from "./UrlService";
 
 export default class OpenGraphService {
   private static instance?: OpenGraphService;
@@ -78,6 +79,7 @@ export default class OpenGraphService {
       const metadata = await this.metaScraper({ url, html });
       return {
         url,
+        urlHash: UrlService.toSHA256(url),
         ogTitle: metadata.title || title,
         ogDescription: metadata.description || title,
         ogImage: metadata.image || undefined,

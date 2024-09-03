@@ -1,12 +1,15 @@
 import { TShortUrl } from "../src/types/TShortUrl";
 import Database from "../src/databases/Database";
+import UrlService from "../src/UrlService";
 
 jest.mock("../src/databases/Connection");
 
 describe("database", () => {
   const url = {
-    id: "this_is_a_test_record",
+    id: "9c202ef7-1b22-47a5-970e-344c0ba59a1a",
+    alias: "this_is_a_test_record",
     url: "https://google.com",
+    urlHash: UrlService.toSHA256("https://google.com"),
     userId: "abc@example.com",
     isOgCustom: false,
   } satisfies TShortUrl;

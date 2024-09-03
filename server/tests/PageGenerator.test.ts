@@ -1,10 +1,13 @@
 import PageGenerator from "../src/PageGenerator";
+import UrlService from "../src/UrlService";
 
 describe("PageGenerator", () => {
   const base = {
-    id: "TEST",
+    id: "0775dd48-61d3-4984-aa72-b08d01b8fae7",
+    alias: "TEST",
     isOgCustom: false,
     url: "https://example.com",
+    urlHash: UrlService.toSHA256("https://example.com"),
   };
   it("generate redirect html", () => {
     const res1 = PageGenerator.generate({

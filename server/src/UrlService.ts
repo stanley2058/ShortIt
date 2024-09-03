@@ -5,6 +5,8 @@ import { TAuth0User } from "./types/TAuth0User";
 import OpenGraphService from "./OpenGraphService";
 import { fromShortUrl, TShortUrl } from "./types/TShortUrl";
 import Env from "./Env";
+import { randomUUID, createHash } from "crypto";
+
 export default class UrlService {
   private static readonly charOpts =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -34,8 +36,15 @@ export default class UrlService {
 
       const created = await Database.getInstance().updateOrInsert({
         ...metadata,
-        ...body,
-        id: await this.generateUrlId(),
+
+        url: body.url,
+        urlHash: UrlService.toSHA256(body.url),
+        ogTitle: body.ogTitle,
+        ogDescription: body.ogDescription,
+        ogImage: body.ogImage,
+
+        id: randomUUID(),
+        alias: await this.generateUrlId(),
         isOgCustom,
         userId: user ? user.email : undefined,
       });
@@ -50,7 +59,13 @@ export default class UrlService {
 
     const update = await Database.getInstance().updateOrInsert({
       ...this.mapShortUrlToResOGUrl(existing),
-      ...body,
+
+      url: body.url,
+      urlHash: UrlService.toSHA256(body.url),
+      ogTitle: body.ogTitle,
+      ogDescription: body.ogDescription,
+      ogImage: body.ogImage,
+
       isOgCustom: existing.isOgCustom || isOgCustom,
     });
     return { result: this.mapShortUrlToResOGUrl(update) };
@@ -113,7 +128,9 @@ export default class UrlService {
   static mapShortUrlToResOGUrl(sUrl: ShortUrl): TResOpenGraphUrl {
     return {
       id: sUrl.id,
+      alias: sUrl.alias,
       url: sUrl.url,
+      urlHash: sUrl.urlHash,
       ogTitle: sUrl.ogTitle || undefined,
       ogDescription: sUrl.ogDescription || undefined,
       ogImage: sUrl.ogImage || undefined,
@@ -133,5 +150,10 @@ export default class UrlService {
     } catch (err) {
       return false;
     }
+  }
+
+  static toSHA256(text: string) {
+    const hash = createHash("sha256");
+    return hash.update(text).digest("base64");
   }
 }

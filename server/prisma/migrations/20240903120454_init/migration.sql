@@ -1,7 +1,9 @@
 -- CreateTable
 CREATE TABLE "ShortUrl" (
-    "id" VARCHAR(255) NOT NULL,
+    "id" UUID NOT NULL,
+    "alias" TEXT NOT NULL,
     "url" TEXT NOT NULL,
+    "urlHash" TEXT NOT NULL,
     "userId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "views" INTEGER NOT NULL DEFAULT 0,
@@ -14,4 +16,4 @@ CREATE TABLE "ShortUrl" (
 );
 
 -- CreateIndex
-CREATE INDEX "ShortUrl_id_url_userId_idx" ON "ShortUrl"("id", "url", "userId");
+CREATE INDEX "ShortUrl_id_urlHash_userId_idx" ON "ShortUrl"("id", "urlHash", "userId");

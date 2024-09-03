@@ -213,10 +213,8 @@ export default class Router {
     if (!existing) return next();
     const shortUrl = fromShortUrl(existing);
 
-    Database.getInstance().updateOrInsert({
-      ...shortUrl,
-      views: existing.views + 1,
-    });
+    shortUrl.views = (shortUrl.views || 0) + 1;
+    Database.getInstance().updateOrInsert(shortUrl).catch(Logger.error);
 
     if (!existing.isOgCustom) res.redirect(existing.url);
     else res.contentType("html").send(PageGenerator.generate(shortUrl));

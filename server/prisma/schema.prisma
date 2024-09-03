@@ -8,8 +8,10 @@ datasource db {
 }
 
 model ShortUrl {
-  id            String   @id @db.VarChar(255)
+  id            String   @id @db.Uuid
+  alias         String
   url           String
+  urlHash       String
   userId        String?
   createdAt     DateTime @default(now())
   views         Int      @default(0)
@@ -18,5 +20,5 @@ model ShortUrl {
   ogDescription String?
   ogImage       String?
 
-  @@index([id, url, userId])
+  @@index([id, urlHash, userId])
 }

@@ -77,7 +77,7 @@ export default function UrlTable(props: {
                   withArrow
                   shadow="md"
                   onOpen={() =>
-                    UrlService.copyToClipboard(`${Envs.SERVER_URL}/${u.id}`)
+                    UrlService.copyToClipboard(`${Envs.SERVER_URL}/${u.alias}`)
                   }
                 >
                   <Popover.Target>
@@ -85,7 +85,7 @@ export default function UrlTable(props: {
                       sx={{ fontFamily: "Azeret Mono, monospace" }}
                       color="green"
                     >
-                      {u.id}
+                      {u.alias}
                     </Button>
                   </Popover.Target>
                   <Popover.Dropdown>

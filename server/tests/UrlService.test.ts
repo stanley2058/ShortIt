@@ -16,8 +16,10 @@ describe("UrlService", () => {
 
   it("maps ShortUrl to TResOpenGraphUrl", () => {
     const mapped = UrlService.mapShortUrlToResOGUrl({
-      id: "Test",
+      id: "851594b2-6afb-4c39-adc1-8714cf698ba5",
+      alias: "Test",
       url: "https://example.com",
+      urlHash: UrlService.toSHA256("https://example.com"),
       createdAt: new Date(),
       isOgCustom: false,
       ogDescription: null,
@@ -27,8 +29,10 @@ describe("UrlService", () => {
       views: 0,
     });
     expect(mapped).toEqual({
-      id: "Test",
+      id: "851594b2-6afb-4c39-adc1-8714cf698ba5",
+      alias: "Test",
       url: "https://example.com",
+      urlHash: "EAaArVRs5qV39C9S3zO0z9ynVoWeZkuNfeMpsVDQnOk=",
     });
   });
 

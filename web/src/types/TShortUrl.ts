@@ -1,6 +1,8 @@
 export type TShortUrl = {
-  id: string; // is also path
+  id: string; // uuid
+  alias: string; // path
   url: string; // target
+  urlHash: string;
   userId?: string; // email
   createdAt?: Date;
   views?: number;

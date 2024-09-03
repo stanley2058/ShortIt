@@ -1,8 +1,10 @@
 import { ShortUrl } from "@prisma/client";
 
 export type TShortUrl = {
-  id: string; // is also path
+  id: string; // uuid
+  alias: string; // path
   url: string; // target
+  urlHash: string;
   userId?: string; // email
   createdAt?: Date;
   views?: number;
@@ -15,7 +17,9 @@ export type TShortUrl = {
 export function fromShortUrl(shortUrl: ShortUrl): TShortUrl {
   const transformed: TShortUrl = {
     id: shortUrl.id,
+    alias: shortUrl.alias,
     url: shortUrl.url,
+    urlHash: shortUrl.urlHash,
     isOgCustom: shortUrl.isOgCustom,
     userId: shortUrl.userId || undefined,
     ogTitle: shortUrl.ogTitle || undefined,

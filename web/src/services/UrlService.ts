@@ -5,8 +5,8 @@ import Envs from "../Envs";
 import { TShortUrl } from "../types/TShortUrl";
 import { UrlFormValue } from "../types/TUrlFormValue";
 
-type ReqOgUrl = TOpenGraphUrl & { id?: string };
-type ResOgUrl = TOpenGraphUrl & { id: string };
+type ReqOgUrl = TOpenGraphUrl & { id?: string; alias?: string };
+type ResOgUrl = TOpenGraphUrl & { id: string; alias: string };
 
 export default class UrlService {
   private static readonly defaultFetchOption = {
@@ -35,7 +35,7 @@ export default class UrlService {
         ogDescription: values.ogDescription || undefined,
         ogImage: values.ogImage || undefined,
       });
-      const shorted = `${Envs.SERVER_URL}/${res.id}`;
+      const shorted = `${Envs.SERVER_URL}/${res.alias}`;
       const sRes = await Swal.fire({
         icon: "success",
         title: edit ? "Changes saved!" : "URL Shortened!",
