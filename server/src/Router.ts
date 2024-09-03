@@ -209,7 +209,7 @@ export default class Router {
     next: NextFunction
   ): Promise<void> {
     if (!req.params.id) return next();
-    const existing = await Database.getInstance().get(req.params.id);
+    const existing = await Database.getInstance().getByAlias(req.params.id);
     if (!existing) return next();
     const shortUrl = fromShortUrl(existing);
 

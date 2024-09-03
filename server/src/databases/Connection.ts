@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import Redis from "ioredis";
 import Env from "../Env";
 import Logger from "../Logger";
-import { createPrismaRedisCache } from "prisma-redis-middleware";
+// import { PrismaExtensionRedis } from "prisma-extension-redis";
 
 export default class Connection {
   private redis?: Redis;
@@ -34,7 +34,8 @@ export default class Connection {
     try {
       const prisma = new PrismaClient();
       Logger.verbose("connected to postgres");
-      return prisma.$extends(this.getPrismaCache() as any) as PrismaClient;
+      return prisma;
+      // return prisma.$extends(this.getPrismaCache()) as unknown as PrismaClient;
     } catch (err) {
       Logger.verbose("", err);
       Logger.fatal("cannot establish database connection");
@@ -42,18 +43,31 @@ export default class Connection {
     throw new Error("unreachable");
   }
 
-  private getPrismaCache() {
-    return createPrismaRedisCache({
-      models: [{ model: "ShortUrl", excludeMethods: ["findMany"] }],
-      storage: {
-        type: "redis",
-        options: {
-          client: this.redis as any,
-          invalidation: { referencesTTL: 300 },
-          log: undefined,
-        },
-      },
-      cacheTime: 300,
-    });
-  }
+  // private getPrismaCache() {
+  //   if (!this.redis) {
+  //     throw new Error("cannot create middle without redis client");
+  //   }
+
+  //   return PrismaExtensionRedis({
+  //     auto: {
+  //       models: [
+  //         {
+  //           model: "ShortUrl",
+  //           excludedOperations: ["findMany"],
+  //         },
+  //       ],
+  //     },
+  //     cache: {
+  //       storage: {
+  //         type: "redis",
+  //         options: {
+  //           client: this.redis,
+  //           invalidation: { referencesTTL: 300 }, // Invalidation settings
+  //           log: undefined, // Logger for cache events
+  //         },
+  //       }, // Storage configuration for async-cache-dedupe
+  //     },
+  //     redis: this.redis,
+  //   });
+  // }
 }

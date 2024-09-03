@@ -48,8 +48,8 @@ export default class UrlService {
         ogDescription: body.ogDescription,
         ogImage: body.ogImage,
 
-        id: randomUUID(),
-        alias: await this.generateUrlId(),
+        id: randomUUID().toString(),
+        alias: await this.generateUrlAlias(),
         isOgCustom,
         userId: user ? user.email : undefined,
       });
@@ -77,7 +77,7 @@ export default class UrlService {
   }
 
   static async getOGUrl(id: string): Promise<TResOpenGraphUrl | null> {
-    const res = await Database.getInstance().get(id);
+    const res = await Database.getInstance().getByAlias(id);
     return res ? this.mapShortUrlToResOGUrl(res) : res;
   }
 
@@ -109,20 +109,20 @@ export default class UrlService {
    * @param retry retries of generations
    * @returns unique id for url path
    */
-  static async generateUrlId(length = 4, retry = 0): Promise<string> {
+  static async generateUrlAlias(length = 4, retry = 0): Promise<string> {
     if (retry >= 3) {
       retry = 0;
       length++;
     }
-    let id = "";
+    let alias = "";
     for (let i = 0; i < length; i++) {
       const idx = Math.floor(Math.random() * this.charOpts.length);
-      id += this.charOpts[idx];
+      alias += this.charOpts[idx];
     }
-    if (this.reservedWords.has(id)) this.generateUrlId(length, retry + 1);
-    const exist = await Database.getInstance().get(id);
-    if (exist === null) return id;
-    return this.generateUrlId(length, retry + 1);
+    if (this.reservedWords.has(alias)) this.generateUrlAlias(length, retry + 1);
+    const exist = await Database.getInstance().getByAlias(alias);
+    if (exist === null) return alias;
+    return this.generateUrlAlias(length, retry + 1);
   }
 
   /**

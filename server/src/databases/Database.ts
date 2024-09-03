@@ -3,6 +3,7 @@ import { TShortUrl } from "../types/TShortUrl";
 import Redis from "ioredis";
 import Logger from "../Logger";
 import Connection from "./Connection";
+import { randomUUID } from "crypto";
 
 export default class Database {
   private static instance?: Database;
@@ -30,19 +31,44 @@ export default class Database {
   }
 
   async updateOrInsert(url: TShortUrl): Promise<ShortUrl> {
-    return await this.prisma.shortUrl.upsert({
-      where: {
-        id: url.id,
-      },
-      create: url,
-      update: url,
-    });
+    try {
+      return await this.prisma.shortUrl.upsert({
+        where: {
+          id: url.id,
+        },
+        create: url,
+        update: url,
+      });
+    } catch (e) {
+      Logger.error("", e);
+      url.id = randomUUID().toString();
+      return await this.prisma.shortUrl.upsert({
+        where: {
+          id: url.id,
+        },
+        create: url,
+        update: url,
+      });
+    }
   }
 
   async get(id: string): Promise<ShortUrl | null> {
-    return await this.prisma.shortUrl.findUnique({
+    try {
+      return await this.prisma.shortUrl.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (e) {
+      Logger.error("", e);
+      return null;
+    }
+  }
+
+  async getByAlias(alias: string): Promise<ShortUrl | null> {
+    return await this.prisma.shortUrl.findFirst({
       where: {
-        id,
+        alias,
       },
     });
   }
