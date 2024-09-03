@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import Redis from "ioredis";
 import Env from "../Env";
 import Logger from "../Logger";
+import { createPrismaRedisCache } from "prisma-redis-middleware";
 
 export default class Connection {
   private redis?: Redis;
@@ -33,11 +34,26 @@ export default class Connection {
     try {
       const prisma = new PrismaClient();
       Logger.verbose("connected to postgres");
-      return prisma;
+      return prisma.$extends(this.getPrismaCache() as any) as PrismaClient;
     } catch (err) {
       Logger.verbose("", err);
       Logger.fatal("cannot establish database connection");
     }
     throw new Error("unreachable");
+  }
+
+  private getPrismaCache() {
+    return createPrismaRedisCache({
+      models: [{ model: "ShortUrl", excludeMethods: ["findMany"] }],
+      storage: {
+        type: "redis",
+        options: {
+          client: this.redis as any,
+          invalidation: { referencesTTL: 300 },
+          log: undefined,
+        },
+      },
+      cacheTime: 300,
+    });
   }
 }

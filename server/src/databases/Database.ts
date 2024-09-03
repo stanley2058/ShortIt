@@ -1,7 +1,6 @@
-import { Prisma, PrismaClient, ShortUrl } from "@prisma/client";
+import { PrismaClient, ShortUrl } from "@prisma/client";
 import { TShortUrl } from "../types/TShortUrl";
 import Redis from "ioredis";
-import { createPrismaRedisCache } from "prisma-redis-middleware";
 import Logger from "../Logger";
 import Connection from "./Connection";
 
@@ -23,21 +22,6 @@ export default class Database {
       this.connectionStatus.redis = true;
       this.prisma = con.getPrisma();
       this.connectionStatus.prisma = true;
-
-      const cacheMiddleware: Prisma.Middleware = createPrismaRedisCache({
-        models: [{ model: "ShortUrl", excludeMethods: ["findMany"] }],
-        storage: {
-          type: "redis",
-          options: {
-            client: this.redis as any,
-            invalidation: { referencesTTL: 300 },
-            log: undefined,
-          },
-        },
-        cacheTime: 300,
-      });
-
-      this.prisma.$use(cacheMiddleware);
       Logger.verbose("prisma cache middleware attached");
     } catch (err) {
       Logger.verbose("", err);
