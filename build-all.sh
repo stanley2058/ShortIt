@@ -2,10 +2,12 @@
 
 REGISTRY="${REGISTRY:=reg.stw.tw}"
 
+docker pull node:lts-alpine
+
 pushd "base-image" || exit 1
 ./index.js
 docker pull "$REGISTRY/short-it-base"
-if docker images | grep "$REGISTRY/short-it-base" &> /dev/null; then
+if docker images | grep "$REGISTRY/short-it-base" &>/dev/null; then
     docker build -f Dockerfile . -t "$REGISTRY/short-it-base" --build-arg REPO="${REGISTRY}" || exit 1
 else
     docker build -f Dockerfile.bootstrap . -t "$REGISTRY/short-it-base" --build-arg REPO="${REGISTRY}" || exit 1
