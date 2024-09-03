@@ -10,7 +10,7 @@ describe("UrlService", () => {
   });
 
   it("creates new unique url", async () => {
-    const id = await UrlService.generateUrlId();
+    const id = await UrlService.generateUrlAlias();
     expect(id.length).toBeGreaterThanOrEqual(4);
   });
 
