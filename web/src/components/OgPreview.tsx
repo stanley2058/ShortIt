@@ -22,26 +22,26 @@ export default function OgPreview(props: { ogMeta: TOpenGraphUrl }) {
         <Image
           src={imgUrl}
           mah={200}
-          sx={{ overflow: "clip" }}
+          style={{ overflow: "clip" }}
           alt={props.ogMeta.ogTitle || "placeholder image"}
           onError={() => setImgUrl(placeholder)}
         />
       </Card.Section>
 
-      <Text weight={500} size="lg" mt="md" sx={{ wordWrap: "break-word" }}>
+      <Text fw={500} size="lg" mt="md" style={{ wordWrap: "break-word" }}>
         {props.ogMeta.ogTitle || "Title Placeholder"}
       </Text>
 
-      <Text size="sm" color="dimmed" sx={{ wordWrap: "break-word" }}>
+      <Text size="sm" c="dimmed" style={{ wordWrap: "break-word" }}>
         {props.ogMeta.ogDescription || "Description Placeholder"}
       </Text>
 
       <Text
         size="sm"
         fs="italic"
-        color="blue"
+        c="blue"
         pt="sm"
-        sx={{ wordWrap: "break-word" }}
+        style={{ wordWrap: "break-word" }}
       >
         {siteUrl}
       </Text>

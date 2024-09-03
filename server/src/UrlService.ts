@@ -10,9 +10,14 @@ import { randomUUID, createHash } from "crypto";
 export default class UrlService {
   private static readonly charOpts =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  private static readonly reservedWords = new Set(
-    ...["user", "counts", "login", "logout", "manage", "about"]
-  );
+  private static readonly reservedWords = new Set([
+    "user",
+    "counts",
+    "login",
+    "logout",
+    "manage",
+    "about",
+  ]);
 
   static async insertOrUpdateUrl(
     body: TReqOpenGraphUrl,

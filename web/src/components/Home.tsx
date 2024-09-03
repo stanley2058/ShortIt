@@ -7,12 +7,11 @@ export default function Home() {
       <Container pb="lg">
         <Text
           variant="gradient"
-          sx={{
-            fontFamily: "Merriweather Sans, sans-serif",
-          }}
+          ff="Merriweather Sans, sans-serif"
           gradient={{ from: "#A8FF75", to: "#D342FF", deg: -45 }}
           ta="center"
-          size={72}
+          mt="15dvh"
+          size="72px"
           fw={700}
         >
           Short That URL!

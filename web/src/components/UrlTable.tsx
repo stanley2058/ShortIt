@@ -81,10 +81,7 @@ export default function UrlTable(props: {
                   }
                 >
                   <Popover.Target>
-                    <Button
-                      sx={{ fontFamily: "Azeret Mono, monospace" }}
-                      color="green"
-                    >
+                    <Button ff="Azeret Mono, monospace" color="green">
                       {u.alias}
                     </Button>
                   </Popover.Target>
@@ -113,7 +110,7 @@ export default function UrlTable(props: {
                   <Tooltip label="Edit">
                     <ActionIcon
                       color="teal"
-                      variant="filled"
+                      variant="subtle"
                       onClick={() => {
                         setEdit(true);
                         setUrlToEdit(u);
@@ -125,7 +122,7 @@ export default function UrlTable(props: {
                   <Tooltip label="Delete">
                     <ActionIcon
                       color="red"
-                      variant="filled"
+                      variant="subtle"
                       onClick={() => deleteUrl(u)}
                     >
                       <IconTrash />

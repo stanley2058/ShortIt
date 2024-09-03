@@ -2,6 +2,8 @@ import { Text } from "@mantine/core";
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { Route, BrowserRouter, Routes } from "react-router-dom";
+
+import "@mantine/core/styles.css";
 import "./index.css";
 
 const Home = lazy(() => import("./components/Home"));

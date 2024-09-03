@@ -3,7 +3,7 @@ import Logger from "./Logger";
 import NodeDomParser from "dom-parser";
 import { TOpenGraphUrl } from "./types/TOpenGraphUrl";
 
-import { Scraper } from "metascraper";
+import type { Metascraper as Scraper } from "metascraper";
 import mScraper from "metascraper";
 import mDescription from "metascraper-description";
 import mImage from "metascraper-image";

@@ -1,7 +1,7 @@
 import { Title, Text } from "@mantine/core";
 import { Step, Styles } from "react-joyride";
 
-const styleLight: Styles = {
+const styleLight: Partial<Styles> = {
   beaconInner: {
     backgroundColor: "#4263eb",
   },
@@ -12,7 +12,7 @@ const styleLight: Styles = {
     backgroundColor: "#228be6",
   },
 };
-const styleDark: Styles = {
+const styleDark: Partial<Styles> = {
   beaconInner: {
     backgroundColor: "#4dabf7",
   },

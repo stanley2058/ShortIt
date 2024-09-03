@@ -10,8 +10,9 @@ import {
   Text,
   TextInput,
   Tooltip,
+  useComputedColorScheme,
 } from "@mantine/core";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { CallBackProps } from "react-joyride";
 import { IconQuestionMark } from "@tabler/icons-react";
 import useMetadataForm from "../hooks/useMetadataForm";
@@ -22,7 +23,6 @@ import { UrlFormValue } from "../types/TUrlFormValue";
 import InputForm from "./UrlFormMetaInputs";
 import Tour from "./Tour";
 import JoyrideHandler from "../services/JoyrideHandler";
-import useColorScheme, { getTheme } from "../hooks/useColorScheme";
 
 const Joyride = lazy(() => import("react-joyride"));
 
@@ -52,10 +52,14 @@ export default function UrlForm(props?: {
       setShowAdvanced,
     })
   );
-  const [tour, setTour] = useState(Tour(getTheme()));
-  const [, , unsubscribe] = useColorScheme((colorScheme) =>
-    setTour(Tour(colorScheme))
-  );
+
+  const colorScheme = useComputedColorScheme();
+  const [tour, setTour] = useState(Tour(colorScheme));
+  const prevColor = useRef<"dark" | "light" | null>(null);
+  if (prevColor.current !== colorScheme) {
+    setTour(Tour(colorScheme));
+    prevColor.current = colorScheme;
+  }
   const ogInfo = useOgInfo(form.getInputProps("url").value);
 
   useEffect(() => {
@@ -66,8 +70,6 @@ export default function UrlForm(props?: {
     form.setFieldValue("ogDescription", ogDescription || "");
     form.setFieldValue("ogImage", ogImage || "");
   }, [ogInfo, form.getInputProps("url").value]);
-
-  useEffect(() => unsubscribe, []);
 
   async function onSubmit(values: UrlFormValue): Promise<void> {
     setLoading(true);
@@ -109,7 +111,7 @@ export default function UrlForm(props?: {
           />
         </Suspense>
       ) : null}
-      <LoadingOverlay visible={loading} overlayBlur={2} />
+      <LoadingOverlay visible={loading} overlayProps={{ blur: 2 }} />
       <Container py="xs">
         <TextInput
           id="urlInput"

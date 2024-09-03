@@ -4,7 +4,9 @@ import {
   Avatar,
   Flex,
   Menu,
+  ThemeIcon,
   Tooltip,
+  useComputedColorScheme,
   useMantineColorScheme,
 } from "@mantine/core";
 import { useContext, useEffect, useState } from "react";
@@ -21,7 +23,8 @@ import Envs from "../Envs";
 import UserContext from "../context/User";
 
 export default function User() {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { toggleColorScheme } = useMantineColorScheme();
+  const colorScheme = useComputedColorScheme();
   const [userInfo, isLoading] = useContext(UserContext);
   const [hasLogin, setHasLogin] = useState(false);
   const navigate = useNavigate();
@@ -39,6 +42,7 @@ export default function User() {
           color={colorScheme === "dark" ? "yellow" : "blue"}
           onClick={() => toggleColorScheme()}
           title="Toggle color scheme"
+          variant="subtle"
         >
           {colorScheme === "dark" ? <IconSun /> : <IconMoonStars />}
         </ActionIcon>
@@ -56,20 +60,20 @@ export default function User() {
                 <Avatar
                   src={userInfo?.picture}
                   alt={userInfo?.email}
-                  sx={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer" }}
                 />
               </Tooltip>
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item
-                icon={<IconTools />}
+                leftSection={<IconTools size="1.25rem" />}
                 onClick={() => navigate("/manage")}
               >
                 Manage URLs
               </Menu.Item>
               <Menu.Item
                 color="red"
-                icon={<IconLogout />}
+                leftSection={<IconLogout size="1.25rem" />}
                 onClick={() =>
                   window.open(`${Envs.SERVER_URL}/logout`, "_self")
                 }

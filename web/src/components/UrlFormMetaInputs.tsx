@@ -28,14 +28,14 @@ export default function InputForm(props: {
       wrap="wrap"
     >
       <Box id="previewMeta" maw="min(100%, 20em)">
-        <Text ta="center" weight={500} size="lg">
+        <Text ta="center" fw={500} size="lg">
           Preview
         </Text>
         <OgPreview ogMeta={props.form.values} />
       </Box>
 
       <Box id="inputMeta">
-        <Text ta="center" weight={500} size="lg">
+        <Text ta="center" fw={500} size="lg">
           Custom Metadata
         </Text>
         <Flex

@@ -9,28 +9,22 @@ import {
 } from "@mantine/core";
 import logo from "/shortit.svg";
 import {
-  ReactJs,
-  Auth0,
-  Figma,
-  Redis,
-  Postgresql,
-  Prisma,
-  Nodedotjs,
-  Express,
+  SiReact as ReactJs,
+  SiAuth0 as Auth0,
+  SiFigma as Figma,
+  SiRedis as Redis,
+  SiPostgresql as Postgresql,
+  SiPrisma as Prisma,
+  SiNodedotjs as Nodedotjs,
+  SiExpress as Express,
+  SiMantine,
 } from "@icons-pack/react-simple-icons";
 
 export default function About() {
   const frontend = [
     <ReactJs key="React.js" color="#61DAFB" title="React.js" size="4rem" />,
-    <Image
-      key="Mantine"
-      title="Mantine"
-      src="https://mantine.dev/favicon.svg"
-      width="4rem"
-      height="auto"
-    />,
+    <SiMantine key="Mantine" color="#339af0" title="Mantine" size="4rem" />,
     <Auth0 color="#EB5424" key="Auth0" title="Auth0" size="4rem" />,
-
     <Figma color="#F24E1E" key="Figma" title="Figma" size="4rem" />,
   ];
   const backend = [

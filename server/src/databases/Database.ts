@@ -2,8 +2,6 @@ import { Prisma, PrismaClient, ShortUrl } from "@prisma/client";
 import { TShortUrl } from "../types/TShortUrl";
 import Redis from "ioredis";
 import { createPrismaRedisCache } from "prisma-redis-middleware";
-// apply fixes from https://github.com/Asjas/prisma-redis-middleware/issues/230
-import type TRedis from "prisma-redis-middleware/node_modules/ioredis/built";
 import Logger from "../Logger";
 import Connection from "./Connection";
 
@@ -31,7 +29,7 @@ export default class Database {
         storage: {
           type: "redis",
           options: {
-            client: this.redis as unknown as TRedis,
+            client: this.redis as any,
             invalidation: { referencesTTL: 300 },
             log: undefined,
           },
