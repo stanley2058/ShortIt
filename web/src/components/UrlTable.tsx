@@ -94,7 +94,11 @@ export default function UrlTable(props: {
                 </Popover>
               </td>
               <td>
-                <Tooltip label={u.url}>
+                <Tooltip
+                  label={u.url}
+                  multiline
+                  style={{ overflowWrap: "anywhere", wordBreak: "normal" }}
+                >
                   <Anchor href={u.url} target="_blank">
                     {shrinkUrl(u.url)}
                   </Anchor>
