@@ -3,5 +3,5 @@ FROM ${REPO}/short-it-base
 ENV NODE_ENV=production
 WORKDIR /shortit
 COPY . .
-RUN ["npm", "run", "build"]
+RUN ["pnpm", "run", "build"]
 
