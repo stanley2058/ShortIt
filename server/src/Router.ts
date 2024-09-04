@@ -4,7 +4,7 @@ import {
   Response,
   Router as ExpressRouter,
 } from "express";
-import { requiresAuth } from "express-openid-connect";
+import expressOpenidConnect from "express-openid-connect";
 import Database from "./databases/Database";
 import Env from "./Env";
 import Logger from "./Logger";
@@ -14,6 +14,8 @@ import { TAuth0User } from "./types/TAuth0User";
 import { TReqOpenGraphUrl } from "./types/TOpenGraphUrl";
 import { fromShortUrl } from "./types/TShortUrl";
 import UrlService from "./UrlService";
+
+const { requiresAuth } = expressOpenidConnect;
 
 type Handler =
   | ((req: Request, res: Response) => Promise<void>)

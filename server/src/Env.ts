@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
-import { ConfigParams } from "express-openid-connect";
 import Logger from "./Logger";
 import { DefaultConfig, EnvMap } from "./types/Config";
+import type { ConfigParams } from "express-openid-connect";
 
 class Configuration extends DefaultConfig {
   constructor() {

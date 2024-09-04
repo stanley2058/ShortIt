@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "description": "",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
-    "start": "ts-node .",
-    "build": "tsc -b --verbose --diagnostics",
-    "test": "jest --verbose",
-    "test-watch": "jest --watchAll --verbose --detectOpenHandles",
-    "coverage": "jest --verbose --coverage",
+    "start": "tsx .",
+    "build": "tsc -b --verbose --diagnostics && tsc-alias",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --verbose",
+    "test-watch": "NODE_OPTIONS=--experimental-vm-modules jest --watchAll --verbose --detectOpenHandles",
+    "coverage": "NODE_OPTIONS=--experimental-vm-modules jest --verbose --coverage",
     "db:migrate": "npx prisma migrate dev",
     "db:generate": "npx prisma generate",
     "db:push": "npx prisma db push",
@@ -62,8 +63,9 @@
     "prisma": "^5.19.1",
     "prisma-mock": "^0.10.3",
     "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
     "tslib": "^2.7.0",
+    "tsx": "^4.19.0",
     "typescript": "^5.5.4"
   }
 }
