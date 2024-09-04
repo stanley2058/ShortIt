@@ -23,7 +23,6 @@ export default class Database {
       this.connectionStatus.redis = true;
       this.prisma = con.getPrisma();
       this.connectionStatus.prisma = true;
-      Logger.verbose("prisma cache middleware attached");
     } catch (err) {
       Logger.verbose("", err);
       Logger.fatal("cannot establish database connection");
