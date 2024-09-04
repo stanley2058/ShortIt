@@ -39,7 +39,8 @@
     "metascraper-title": "^5.45.22",
     "metascraper-twitter": "^5.45.6",
     "metascraper-youtube": "^5.45.22",
-    "npmlog": "^7.0.1"
+    "npmlog": "^7.0.1",
+    "prisma-extension-redis": "^1.0.0"
   },
   "devDependencies": {
     "@types/compression": "^1.7.5",

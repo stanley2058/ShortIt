@@ -1,5 +1,6 @@
 import { PrismaClient, ShortUrl } from "@prisma/client";
 import { TShortUrl } from "../types/TShortUrl";
+import Redis from "ioredis";
 import Logger from "../Logger";
 import Connection from "./Connection";
 import { randomUUID } from "crypto";
@@ -8,14 +9,18 @@ export default class Database {
   private static instance?: Database;
   static getInstance = () => this.instance || (this.instance = new this());
 
+  private redis!: Redis;
   private prisma!: PrismaClient;
   private connectionStatus = {
+    redis: false,
     prisma: false,
   };
 
   private constructor() {
     try {
       const con = new Connection();
+      this.redis = con.getRedis();
+      this.connectionStatus.redis = true;
       this.prisma = con.getPrisma();
       this.connectionStatus.prisma = true;
       Logger.verbose("prisma cache middleware attached");
@@ -119,10 +124,12 @@ export default class Database {
   }
 
   async connect() {
-    const { prisma } = this.connectionStatus;
+    const { redis, prisma } = this.connectionStatus;
     try {
+      if (!redis) await this.redis.connect();
       if (!prisma) await this.prisma.$connect();
       this.connectionStatus = {
+        redis: true,
         prisma: true,
       };
     } catch (err) {
@@ -132,10 +139,12 @@ export default class Database {
   }
 
   async disconnect() {
-    const { prisma } = this.connectionStatus;
+    const { redis, prisma } = this.connectionStatus;
     try {
+      if (redis) await this.redis.quit();
       if (prisma) await this.prisma.$disconnect();
       this.connectionStatus = {
+        redis: false,
         prisma: false,
       };
     } catch (err) {
