@@ -23,12 +23,12 @@ app.use(
   })
 );
 app.use(compression());
-app.use(auth(Env.authConfig));
+app.use(express.static("dist"));
 
+app.use(auth(Env.authConfig));
 app.use(new Router().route());
 
 // serve SPA webpage
-app.use(express.static("dist"));
 app.get("*", (_, res) =>
   res.sendFile(path.resolve(import.meta.dirname, "dist/index.html"))
 );

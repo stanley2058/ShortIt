@@ -7,7 +7,7 @@ import {
   Title,
   Anchor,
 } from "@mantine/core";
-import logo from "/shortit.svg";
+import logo from "/images/shortit.svg";
 import {
   SiReact as ReactJs,
   SiAuth0 as Auth0,
@@ -48,7 +48,11 @@ export default function About() {
         </Title>
         <Card.Section>
           <Flex justify="center">
-            <Image src={logo} height="auto" width={100} alt="Short It! Logo" />
+            <Image
+              src={logo}
+              alt="Short It! Logo"
+              style={{ height: "auto", width: "100px" }}
+            />
           </Flex>
         </Card.Section>
         <Card.Section>

@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { UserProvider } from "../context/User";
 import useUserInfo from "../hooks/useUserInfo";
 import User from "./User";
-import logo from "/shortit.svg";
+import logo from "/images/shortit.svg";
 
 type ColorScheme = "dark" | "light";
 function handleSweetalertTheme(theme: ColorScheme) {
@@ -67,9 +67,8 @@ function App(props: PropsWithChildren) {
             >
               <Image
                 src={logo}
-                height="2.5rem"
-                width="auto"
                 alt="Short It! logo"
+                style={{ width: "auto", height: "2.5rem" }}
               />
               <Text
                 variant="gradient"

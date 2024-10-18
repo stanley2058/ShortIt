@@ -1,7 +1,7 @@
 import { Card, Image, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { TOpenGraphUrl } from "../types/TOpenGraphUrl";
-import placeholder from "/placeholder.svg";
+import placeholder from "/images/placeholder.svg";
 import UrlService from "../services/UrlService";
 
 export default function OgPreview(props: { ogMeta: TOpenGraphUrl }) {
