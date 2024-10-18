@@ -30,7 +30,7 @@ app.use(new Router().route());
 // serve SPA webpage
 app.use(express.static("dist"));
 app.get("*", (_, res) =>
-  res.sendFile(path.resolve(__dirname, "dist/index.html"))
+  res.sendFile(path.resolve(import.meta.dirname, "dist/index.html"))
 );
 
 (async () => {
