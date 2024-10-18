@@ -7,9 +7,12 @@ async function fetchOgInfo(
   url: string,
   controller: AbortController
 ): Promise<TOpenGraphUrl | null> {
-  const res = await fetch(`${Envs.API_URI}/og?url=${encodeURIComponent(url)}`, {
-    signal: controller.signal,
-  });
+  const res = await fetch(
+    `${Envs.API_URI}/og?url=${encodeURIComponent(btoa(url))}`,
+    {
+      signal: controller.signal,
+    }
+  );
   if (res.ok) return res.json();
   return null;
 }

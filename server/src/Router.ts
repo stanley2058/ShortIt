@@ -190,7 +190,7 @@ export default class Router {
   ): Promise<void> {
     const { url } = req.query as { url: string };
     const ogMeta = await OpenGraphService.getInstance().getOgMetadata(
-      decodeURIComponent(url)
+      Buffer.from(decodeURIComponent(url), "base64").toString()
     );
 
     if (ogMeta) res.json(ogMeta);
